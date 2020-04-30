@@ -15,7 +15,7 @@ if (process.env.SERVER === '1') {
     // server section
     server.get('/', (req, res) => {
         res.send(`Test`);
-        botApp.sendGithubEmbed();
+        botApp.sendGithubEmbed(JSON.parse(require('fs').readFileSync('./bot/sample.json').toString()));
     });
 
     server.post('/closure', (req, res) => {

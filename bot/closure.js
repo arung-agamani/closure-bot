@@ -35,9 +35,18 @@ class Closure {
         this.client.login(token);
     }
 
-    sendGithubEmbed() {
+    sendGithubEmbed(jsonData) {
+        // console.log(jsonData);
         const embedMessage = new MessageEmbed();
-        embedMessage.setTitle("New Github Push Event!");
+        const commits = jsonData.commits;
+        
+        embedMessage
+            .setTitle("New Github Push Event!")
+            .setDescription(`Showing up to ${commits.length} commits.`)
+            .addField("Pusher", jsonData.pusher.name);
+        for (const commit of commits) {
+            embedMessage.addField("Commit message", commit.message);
+        }
         this.client
             .guilds.cache.get('339763195554299904')
             .channels.cache.get('705468600340709418')
