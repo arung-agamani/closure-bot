@@ -1,0 +1,33 @@
+{
+  "name": "closure-bot",
+  "version": "1.0.0",
+  "description": "Weeb Discord bot for Github event/actions",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arung-agamani/closure-bot.git"
+  },
+  "keywords": [
+    "bot",
+    "discord",
+    "nodejs",
+    "javascript",
+    "js"
+  ],
+  "author": "Haruka Shirayuki",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/arung-agamani/closure-bot/issues"
+  },
+  "homepage": "https://github.com/arung-agamani/closure-bot#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "discord.js": "^12.2.0",
+    "dotenv": "^8.2.0",
+    "eslint": "^6.8.0",
+    "express": "^4.17.1"
+  }
+}
