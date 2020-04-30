@@ -4,7 +4,9 @@
   "description": "Weeb Discord bot for Github event/actions",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "server": "cross-env BOT='0' SERVER='1' node index.js",
+    "bot": "cross-env BOT='1' SERVER='0' node index.js",
+    "both": "cross-env BOT='1' SERVER='1' node index.js"
   },
   "repository": {
     "type": "git",
@@ -29,5 +31,8 @@
     "dotenv": "^8.2.0",
     "eslint": "^6.8.0",
     "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.2"
   }
 }
