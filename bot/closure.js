@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const MessageEmbed = require('discord.js').MessageEmbed;
 const fs = require('fs');
 
 class Closure {
@@ -32,6 +33,15 @@ class Closure {
             }
         });
         this.client.login(token);
+    }
+
+    sendGithubEmbed() {
+        const embedMessage = new MessageEmbed();
+        embedMessage.setTitle("New Github Push Event!");
+        this.client
+            .guilds.cache.get('339763195554299904')
+            .channels.cache.get('705468600340709418')
+            .send(embedMessage);
     }
 }
 

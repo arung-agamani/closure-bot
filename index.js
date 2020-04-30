@@ -2,10 +2,10 @@ const dotenv = require('dotenv').config();
 const express = require('express');
 
 const Closure = require('./bot/closure');
+const botApp = new Closure();
 
 if (process.env.BOT === '1') {
     console.log("Starting bot.");
-    const botApp = new Closure();
     botApp.start(process.env.DISCORD_BOT_TOKEN);
 }
 
@@ -15,6 +15,7 @@ if (process.env.SERVER === '1') {
     // server section
     server.get('/', (req, res) => {
         res.send(`Test`);
+        botApp.sendGithubEmbed();
     });
 
     server.post('/closure', (req, res) => {
