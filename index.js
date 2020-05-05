@@ -1,5 +1,6 @@
 const dotenv = require('dotenv').config();
 const express = require('express');
+const bodyParser = require('body-parser');
 
 const Closure = require('./bot/closure');
 const botApp = new Closure();
@@ -12,6 +13,7 @@ if (process.env.BOT === '1') {
 if (process.env.SERVER === '1') {
     console.log("Starting server.");
     const server = express();
+    server.use(bodyParser.json());
     // server section
     server.get('/', (req, res) => {
         res.send(`Test`);
@@ -19,7 +21,8 @@ if (process.env.SERVER === '1') {
     });
 
     server.post('/closure', (req, res) => {
-        res.send('okay dokutah');
+        // res.send('okay dokutah');
+        botApp.sendGithubEmbed(req.body);
     });
 
     server.listen(2000, ()=> {
