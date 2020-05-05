@@ -8,6 +8,9 @@
     "bot": "cross-env BOT='1' SERVER='0' node index.js",
     "both": "cross-env BOT='1' SERVER='1' node index.js"
   },
+  "engines": {
+    "node": "12.x"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/arung-agamani/closure-bot.git"

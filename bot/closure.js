@@ -37,20 +37,21 @@ class Closure {
 
     sendGithubEmbed(jsonData) {
         // console.log(jsonData);
-        const embedMessage = new MessageEmbed();
-        const commits = jsonData.commits;
+        // const embedMessage = new MessageEmbed();
+        // const commits = jsonData.commits;
         
-        embedMessage
-            .setTitle("New Github Push Event!")
-            .setDescription(`Showing up to ${commits.length} commits.`)
-            .addField("Pusher", jsonData.pusher.name);
-        for (const commit of commits) {
-            embedMessage.addField("Commit message", commit.message);
-        }
+        // embedMessage
+        //     .setTitle("New Github Push Event!")
+        //     .setDescription(`Showing up to ${commits.length} commits.`)
+        //     .setThumbnail(jsonData.sender.avatar_url)
+        //     .addField("Pusher", jsonData.pusher.name);
+        // for (const commit of commits) {
+        //     embedMessage.addField("Commit message", commit.message);
+        // }
         this.client
             .guilds.cache.get('339763195554299904')
             .channels.cache.get('705468600340709418')
-            .send(embedMessage);
+            .send(require('./embedMessage').getEmbed(jsonData));
     }
 }
 

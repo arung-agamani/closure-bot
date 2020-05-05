@@ -1,0 +1,285 @@
+{
+    "ref": "refs/heads/master",
+    "before": "d71534e0e42e05c91a844cabf15bcc5601a919a5",
+    "after": "71e5bd84f99069c4b37f0c893b27f2569600ca1c",
+    "repository": {
+      "id": 260262029,
+      "node_id": "MDEwOlJlcG9zaXRvcnkyNjAyNjIwMjk=",
+      "name": "closure-bot",
+      "full_name": "arung-agamani/closure-bot",
+      "private": false,
+      "owner": {
+        "name": "arung-agamani",
+        "email": "35528733+arung-agamani@users.noreply.github.com",
+        "login": "arung-agamani",
+        "id": 35528733,
+        "node_id": "MDQ6VXNlcjM1NTI4NzMz",
+        "avatar_url": "https://avatars1.githubusercontent.com/u/35528733?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/arung-agamani",
+        "html_url": "https://github.com/arung-agamani",
+        "followers_url": "https://api.github.com/users/arung-agamani/followers",
+        "following_url": "https://api.github.com/users/arung-agamani/following{/other_user}",
+        "gists_url": "https://api.github.com/users/arung-agamani/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/arung-agamani/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/arung-agamani/subscriptions",
+        "organizations_url": "https://api.github.com/users/arung-agamani/orgs",
+        "repos_url": "https://api.github.com/users/arung-agamani/repos",
+        "events_url": "https://api.github.com/users/arung-agamani/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/arung-agamani/received_events",
+        "type": "User",
+        "site_admin": false
+      },
+      "html_url": "https://github.com/arung-agamani/closure-bot",
+      "description": "Discord bot for handling Github (and possibly other git VCS) events/webhooks. Closure is basically Github-chan.",
+      "fork": false,
+      "url": "https://github.com/arung-agamani/closure-bot",
+      "forks_url": "https://api.github.com/repos/arung-agamani/closure-bot/forks",
+      "keys_url": "https://api.github.com/repos/arung-agamani/closure-bot/keys{/key_id}",
+      "collaborators_url": "https://api.github.com/repos/arung-agamani/closure-bot/collaborators{/collaborator}",
+      "teams_url": "https://api.github.com/repos/arung-agamani/closure-bot/teams",
+      "hooks_url": "https://api.github.com/repos/arung-agamani/closure-bot/hooks",
+      "issue_events_url": "https://api.github.com/repos/arung-agamani/closure-bot/issues/events{/number}",
+      "events_url": "https://api.github.com/repos/arung-agamani/closure-bot/events",
+      "assignees_url": "https://api.github.com/repos/arung-agamani/closure-bot/assignees{/user}",
+      "branches_url": "https://api.github.com/repos/arung-agamani/closure-bot/branches{/branch}",
+      "tags_url": "https://api.github.com/repos/arung-agamani/closure-bot/tags",
+      "blobs_url": "https://api.github.com/repos/arung-agamani/closure-bot/git/blobs{/sha}",
+      "git_tags_url": "https://api.github.com/repos/arung-agamani/closure-bot/git/tags{/sha}",
+      "git_refs_url": "https://api.github.com/repos/arung-agamani/closure-bot/git/refs{/sha}",
+      "trees_url": "https://api.github.com/repos/arung-agamani/closure-bot/git/trees{/sha}",
+      "statuses_url": "https://api.github.com/repos/arung-agamani/closure-bot/statuses/{sha}",
+      "languages_url": "https://api.github.com/repos/arung-agamani/closure-bot/languages",
+      "stargazers_url": "https://api.github.com/repos/arung-agamani/closure-bot/stargazers",
+      "contributors_url": "https://api.github.com/repos/arung-agamani/closure-bot/contributors",
+      "subscribers_url": "https://api.github.com/repos/arung-agamani/closure-bot/subscribers",
+      "subscription_url": "https://api.github.com/repos/arung-agamani/closure-bot/subscription",
+      "commits_url": "https://api.github.com/repos/arung-agamani/closure-bot/commits{/sha}",
+      "git_commits_url": "https://api.github.com/repos/arung-agamani/closure-bot/git/commits{/sha}",
+      "comments_url": "https://api.github.com/repos/arung-agamani/closure-bot/comments{/number}",
+      "issue_comment_url": "https://api.github.com/repos/arung-agamani/closure-bot/issues/comments{/number}",
+      "contents_url": "https://api.github.com/repos/arung-agamani/closure-bot/contents/{+path}",
+      "compare_url": "https://api.github.com/repos/arung-agamani/closure-bot/compare/{base}...{head}",
+      "merges_url": "https://api.github.com/repos/arung-agamani/closure-bot/merges",
+      "archive_url": "https://api.github.com/repos/arung-agamani/closure-bot/{archive_format}{/ref}",
+      "downloads_url": "https://api.github.com/repos/arung-agamani/closure-bot/downloads",
+      "issues_url": "https://api.github.com/repos/arung-agamani/closure-bot/issues{/number}",
+      "pulls_url": "https://api.github.com/repos/arung-agamani/closure-bot/pulls{/number}",
+      "milestones_url": "https://api.github.com/repos/arung-agamani/closure-bot/milestones{/number}",
+      "notifications_url": "https://api.github.com/repos/arung-agamani/closure-bot/notifications{?since,all,participating}",
+      "labels_url": "https://api.github.com/repos/arung-agamani/closure-bot/labels{/name}",
+      "releases_url": "https://api.github.com/repos/arung-agamani/closure-bot/releases{/id}",
+      "deployments_url": "https://api.github.com/repos/arung-agamani/closure-bot/deployments",
+      "created_at": 1588264053,
+      "updated_at": "2020-04-30T17:10:59Z",
+      "pushed_at": 1588278583,
+      "git_url": "git://github.com/arung-agamani/closure-bot.git",
+      "ssh_url": "git@github.com:arung-agamani/closure-bot.git",
+      "clone_url": "https://github.com/arung-agamani/closure-bot.git",
+      "svn_url": "https://github.com/arung-agamani/closure-bot",
+      "homepage": null,
+      "size": 20,
+      "stargazers_count": 0,
+      "watchers_count": 0,
+      "language": "JavaScript",
+      "has_issues": true,
+      "has_projects": true,
+      "has_downloads": true,
+      "has_wiki": true,
+      "has_pages": false,
+      "forks_count": 0,
+      "mirror_url": null,
+      "archived": false,
+      "disabled": false,
+      "open_issues_count": 0,
+      "license": {
+        "key": "mit",
+        "name": "MIT License",
+        "spdx_id": "MIT",
+        "url": "https://api.github.com/licenses/mit",
+        "node_id": "MDc6TGljZW5zZTEz"
+      },
+      "forks": 0,
+      "open_issues": 0,
+      "watchers": 0,
+      "default_branch": "master",
+      "stargazers": 0,
+      "master_branch": "master"
+    },
+    "pusher": {
+      "name": "arung-agamani",
+      "email": "35528733+arung-agamani@users.noreply.github.com"
+    },
+    "sender": {
+      "login": "arung-agamani",
+      "id": 35528733,
+      "node_id": "MDQ6VXNlcjM1NTI4NzMz",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/35528733?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/arung-agamani",
+      "html_url": "https://github.com/arung-agamani",
+      "followers_url": "https://api.github.com/users/arung-agamani/followers",
+      "following_url": "https://api.github.com/users/arung-agamani/following{/other_user}",
+      "gists_url": "https://api.github.com/users/arung-agamani/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/arung-agamani/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/arung-agamani/subscriptions",
+      "organizations_url": "https://api.github.com/users/arung-agamani/orgs",
+      "repos_url": "https://api.github.com/users/arung-agamani/repos",
+      "events_url": "https://api.github.com/users/arung-agamani/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/arung-agamani/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "created": false,
+    "deleted": false,
+    "forced": false,
+    "base_ref": null,
+    "compare": "https://github.com/arung-agamani/closure-bot/compare/d71534e0e42e...71e5bd84f990",
+    "commits": [
+      {
+        "id": "0ce6e89a5e8f3f3b0f36d18ca9f266da83d4fd17",
+        "tree_id": "fecee75775e9e02370bc3c9ab004fe2e81fc0840",
+        "distinct": true,
+        "message": "Restructured bot into object oriented architecture",
+        "timestamp": "2020-05-01T02:10:22+07:00",
+        "url": "https://github.com/arung-agamani/closure-bot/commit/0ce6e89a5e8f3f3b0f36d18ca9f266da83d4fd17",
+        "author": {
+          "name": "Haruka Shirayuki",
+          "email": "arung.agamani@gmail.com",
+          "username": "arung-agamani"
+        },
+        "committer": {
+          "name": "Haruka Shirayuki",
+          "email": "arung.agamani@gmail.com",
+          "username": "arung-agamani"
+        },
+        "added": [
+          "bot/closure.js",
+          "bot/closure.json",
+          "bot/commands/isAdmin.js"
+        ],
+        "removed": [
+  
+        ],
+        "modified": [
+          "bot/commands/ping.js",
+          "index.js"
+        ]
+      },
+      {
+        "id": "b0c17de72077978aa4be85ddce61ae640cd6b4a7",
+        "tree_id": "e1ce4283a1abddabc03bfe5654d468dd94070ae3",
+        "distinct": true,
+        "message": "Created script for running bot, server, or both",
+        "timestamp": "2020-05-01T02:34:36+07:00",
+        "url": "https://github.com/arung-agamani/closure-bot/commit/b0c17de72077978aa4be85ddce61ae640cd6b4a7",
+        "author": {
+          "name": "Haruka Shirayuki",
+          "email": "arung.agamani@gmail.com",
+          "username": "arung-agamani"
+        },
+        "committer": {
+          "name": "Haruka Shirayuki",
+          "email": "arung.agamani@gmail.com",
+          "username": "arung-agamani"
+        },
+        "added": [
+  
+        ],
+        "removed": [
+  
+        ],
+        "modified": [
+          "index.js",
+          "package-lock.json",
+          "package.json"
+        ]
+      },
+      {
+        "id": "a7a23a8d9417e760c58347a00702ccd611c79983",
+        "tree_id": "fea71bbe24fa5230dc6946c18c9d81be95b5e15e",
+        "distinct": true,
+        "message": "Basic discord embed message",
+        "timestamp": "2020-05-01T03:04:54+07:00",
+        "url": "https://github.com/arung-agamani/closure-bot/commit/a7a23a8d9417e760c58347a00702ccd611c79983",
+        "author": {
+          "name": "Haruka Shirayuki",
+          "email": "arung.agamani@gmail.com",
+          "username": "arung-agamani"
+        },
+        "committer": {
+          "name": "Haruka Shirayuki",
+          "email": "arung.agamani@gmail.com",
+          "username": "arung-agamani"
+        },
+        "added": [
+          "bot/sample.json"
+        ],
+        "removed": [
+  
+        ],
+        "modified": [
+          "bot/closure.js",
+          "index.js"
+        ]
+      },
+      {
+        "id": "71e5bd84f99069c4b37f0c893b27f2569600ca1c",
+        "tree_id": "96b60bca850c47b36171b879ca12632234464b00",
+        "distinct": true,
+        "message": "Simple embed design",
+        "timestamp": "2020-05-01T03:29:33+07:00",
+        "url": "https://github.com/arung-agamani/closure-bot/commit/71e5bd84f99069c4b37f0c893b27f2569600ca1c",
+        "author": {
+          "name": "Haruka Shirayuki",
+          "email": "arung.agamani@gmail.com",
+          "username": "arung-agamani"
+        },
+        "committer": {
+          "name": "Haruka Shirayuki",
+          "email": "arung.agamani@gmail.com",
+          "username": "arung-agamani"
+        },
+        "added": [
+  
+        ],
+        "removed": [
+  
+        ],
+        "modified": [
+          "bot/closure.js",
+          "bot/sample.json",
+          "index.js"
+        ]
+      }
+    ],
+    "head_commit": {
+      "id": "71e5bd84f99069c4b37f0c893b27f2569600ca1c",
+      "tree_id": "96b60bca850c47b36171b879ca12632234464b00",
+      "distinct": true,
+      "message": "Simple embed design",
+      "timestamp": "2020-05-01T03:29:33+07:00",
+      "url": "https://github.com/arung-agamani/closure-bot/commit/71e5bd84f99069c4b37f0c893b27f2569600ca1c",
+      "author": {
+        "name": "Haruka Shirayuki",
+        "email": "arung.agamani@gmail.com",
+        "username": "arung-agamani"
+      },
+      "committer": {
+        "name": "Haruka Shirayuki",
+        "email": "arung.agamani@gmail.com",
+        "username": "arung-agamani"
+      },
+      "added": [
+  
+      ],
+      "removed": [
+  
+      ],
+      "modified": [
+        "bot/closure.js",
+        "bot/sample.json",
+        "index.js"
+      ]
+    }
+  }
