@@ -23,6 +23,7 @@ if (process.env.SERVER === '1') {
     server.post('/closure', (req, res) => {
         // res.send('okay dokutah');
         botApp.sendGithubEmbed(req.body);
+        res.json({status : 200});
     });
 
     server.listen(2000, ()=> {
