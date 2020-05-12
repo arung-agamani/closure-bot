@@ -1,7 +1,6 @@
 const dotenv = require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
-
 const Closure = require('./bot/closure');
 const botApp = new Closure();
 
@@ -25,6 +24,36 @@ if (process.env.SERVER === '1') {
         botApp.sendGithubEmbed(req.body);
         res.json({status : 200});
     });
+
+    server.post('/warfarin', (req, res) => {
+        console.log(req.body);
+        let urlObject = new URL(req.body.pageUrl);
+        if (req.body.requestOrigin == "Twitter") {
+            //console.log(urlObject);
+            let twitterUrl = new URL(req.body.linkUrl);
+            let origin = twitterUrl.origin;
+            let paths = twitterUrl.pathname.split('/');
+            let path = paths.slice(0, paths.length - 2).join('/');
+            botApp.publishLink('339763195554299904', req.body.tag, origin + path);
+
+        } else if (req.body.requestOrigin == "Facebook") {
+            console.log(urlObject.href);
+        }
+        // botApp.publishLink('339763195554299904', req.body.tag, urlObject.href);
+        res.send('POST Request 200');
+    });
+
+    server.get('/warfarin', (req, res) => {
+        res.send("GET Request 200")
+    })
+
+    server.post('/test', (req, res) => {
+        if (req.headers['x-github-event'] != undefined) {
+            res.json({status : 'from github'});
+        } else {
+            res.json({status : 404});
+        }
+    })
 
     server.listen(2000, ()=> {
         console.log('Server is on at port 2000');

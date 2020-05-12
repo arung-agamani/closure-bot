@@ -1,10 +1,10 @@
 const MessageEmbed = require('discord.js').MessageEmbed;
-const embedMessage = new MessageEmbed();
+
 module.exports = {
     getEmbed(jsonData) {
         const commits = jsonData.commits;
         const ref = jsonData.ref.split('/');
-        
+        const embedMessage = new MessageEmbed();
         embedMessage
             .setTitle(`New Github Push Event to branch [${ref[ref.length-1]}](${jsonData.repository.html_url+'/tree/'+ref[ref.length-1]})`)
             .setDescription(`Showing up to ${commits.length} commits.\nRepository url [here](${jsonData.repository.html_url})`)
