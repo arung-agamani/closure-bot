@@ -27,17 +27,27 @@ if (process.env.SERVER === '1') {
 
     server.post('/warfarin', (req, res) => {
         console.log(req.body);
-        let urlObject = new URL(req.body.pageUrl);
+        
         if (req.body.requestOrigin == "Twitter") {
+            let urlObject = new URL(req.body.pageUrl);
             //console.log(urlObject);
             let twitterUrl = new URL(req.body.linkUrl);
             let origin = twitterUrl.origin;
             let paths = twitterUrl.pathname.split('/');
             let path = paths.slice(0, paths.length - 2).join('/');
             botApp.publishLink('339763195554299904', req.body.tag, origin + path);
-
         } else if (req.body.requestOrigin == "Facebook") {
+            let urlObject = new URL(req.body.pageUrl);
             console.log(urlObject.href);
+        } else if (req.body.requestOrigin.match(/pixiv/i)) {
+            if (req.body.value.linkUrl.match(/pximg/i)) {
+                // this is a right click on image
+                botApp.publishLink('339763195554299904', req.body.tag, req.body.value.pageUrl);
+            } else if (req.body.value.linkUrl.match(/pixiv\.net/i)) {
+                // this is a right click on image thumbnail to another artwork
+                botApp.publishLink('339763195554299904', req.body.tag, req.body.value.linkUrl);
+            }
+            // botApp.publishLink('339763195554299904', req.body.tag, req.body.value.pageUrl);
         }
         // botApp.publishLink('339763195554299904', req.body.tag, urlObject.href);
         res.send('POST Request 200');

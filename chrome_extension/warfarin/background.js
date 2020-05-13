@@ -15,7 +15,15 @@ tagsXHR.onreadystatechange = () => {
                 title : tagObj.text,
                 parentId : "WARFARIN_001",
                 contexts : ["image"],
+                documentUrlPatterns : ["https://*.twitter.com/*", "https://twitter.com/*"],
                 id : "WARFARIN_002_" + tagObj.tag
+            });
+            chrome.contextMenus.create({
+                title : tagObj.text,
+                parentId : "WARFARIN_001",
+                contexts : ["image", "link"],
+                documentUrlPatterns : ["https://*.pixiv.net/*/artworks/*"],
+                id : "WARFARIN_PIXIV_" + tagObj.tag
             });
         }
     }
@@ -67,6 +75,13 @@ function sendImageLink(info, tab) {
         jsonBody.srcUrl = info.srcUrl;
         jsonBody.linkUrl = info.linkUrl;
         jsonBody.frameUrl = info.frameUrl;
+        jsonBody.tag = checkTags(info.menuItemId);
+        xhr.open('POST', 'http://localhost:2000/warfarin');
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify(jsonBody));
+    } else if (info.menuItemId.match(/pixiv/i)) {
+        jsonBody.requestOrigin = "pixiv";
+        jsonBody.value = info;
         jsonBody.tag = checkTags(info.menuItemId);
         xhr.open('POST', 'http://localhost:2000/warfarin');
         xhr.setRequestHeader('Content-Type', 'application/json');

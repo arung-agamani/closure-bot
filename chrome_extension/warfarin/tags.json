@@ -23,6 +23,10 @@
         {
             "text" : "Lounge",
             "tag" : "lounge"
+        },
+        {
+            "text" : "Warfarin",
+            "tag" : "warfarin"
         }
     ]
 }
