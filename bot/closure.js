@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const embedMessage = require('./embedMessage');
 const sqlite = require('sqlite3');
+const Sequelize = require('sequelize');
 
 class Closure {
     constructor() {
@@ -40,6 +41,7 @@ class Closure {
                 this.client.commands.get(command).execute(msg, args, this);
             } catch (error) {
                 console.error(`Error in executing "${command}" command!`);
+                console.error(error.message);
                 msg.reply(`There is an error on that command, Doctor!\nCheck your server log.`);
             }
         });
@@ -50,14 +52,39 @@ class Closure {
         console.log(text);
     }
 
-    sendGithubEmbed(jsonData) {
-        console.log(`Embed message sent to
-        Guild:  339763195554299904
-        Channel : 705468600340709418`);
-        this.client
-            .guilds.cache.get('339763195554299904')
-            .channels.cache.get('705468600340709418')
-            .send(embedMessage.getEmbed(jsonData));
+    getGuildTags(guild_id, callback) {
+        if (guild_id.match(/^\d*$/)) {
+            let sqlQuery = `SELECT c.tags FROM Guild_Channel as g, Channel_Tags as c WHERE g.guild_id="${guild_id}" 
+            AND g.channel_id=c.channel_id`;
+            let jsonResponse = {};
+            this.db.all(sqlQuery, (err, rows) => {
+                if (err) {
+                    console.error(err.message);
+                    jsonResponse.status = 500;
+                    jsonResponse.error = err;
+                    return jsonResponse;
+                }
+                jsonResponse.status = 200;
+                let tags = [];
+                let tagsSet = new Set();
+                for (const row of rows) {
+                    // if (!tags.some(x => x.tags === row.tags)){
+                    //     tags.push(row);
+                    // }
+                    tagsSet.add(row.tags);
+                }
+                jsonResponse.tags = Array.from(tagsSet);
+                callback(jsonResponse);
+                return;
+            })
+        } else {
+            callback({
+                status : 400,
+                message : "Bad guild_id request"
+            });
+            return ;
+        }
+        
     }
 
     warfarinExtensionHandler(jsonData) {
@@ -86,10 +113,18 @@ class Closure {
             } else {
                 let values = '';
                 for (let i = 0; i < tags.length; i++) {
-                    if (i != tags.length-1) {
-                        values += `("${channel_id}", "${tags[i]}", "${registrar}"),`
+                    if (tags[i].match(/^[\w|-]{1,24}$/)) {
+                        if (i != tags.length-1) {
+                            values += `("${channel_id}", "${tags[i]}", "${registrar}"),`
+                        } else {
+                            values += `("${channel_id}", "${tags[i]}", "${registrar}");`
+                        }
                     } else {
-                        values += `("${channel_id}", "${tags[i]}", "${registrar}");`
+                        callback({
+                            status : 0,
+                            message : "Bad tag format. Please only use alphanumeric and '-' character with length between 1 and 24."
+                        });
+                        return;
                     }
                 }
                 if (row) {
@@ -145,6 +180,7 @@ class Closure {
                 }
             }
         })
+        
     }
 
     deleteTag(guild_id, channel_id, tags, callback) {

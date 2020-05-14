@@ -55,6 +55,16 @@ if (process.env.SERVER === '1') {
 
     server.get('/warfarin', (req, res) => {
         res.send("GET Request 200")
+    });
+
+    server.get('/warfarin/:guild_id/tags', (req, res) => {
+        botApp.getGuildTags(req.params.guild_id, retval => {
+            if (retval.status === 200) {
+                res.json(retval);
+            } else {
+                res.status(400).send(retval.message);
+            }
+        })
     })
 
     server.post('/test', (req, res) => {

@@ -12,14 +12,14 @@ tagsXHR.onreadystatechange = () => {
         tagsContainer = JSON.parse(tagsXHR.responseText);
         for (const tagObj of tagsContainer.tags) {
             chrome.contextMenus.create({
-                title : tagObj.text,
+                title : tagObj.tag,
                 parentId : "WARFARIN_001",
                 contexts : ["image"],
                 documentUrlPatterns : ["https://*.twitter.com/*", "https://twitter.com/*"],
                 id : "WARFARIN_002_" + tagObj.tag
             });
             chrome.contextMenus.create({
-                title : tagObj.text,
+                title : tagObj.tag,
                 parentId : "WARFARIN_001",
                 contexts : ["image", "link"],
                 documentUrlPatterns : ["https://*.pixiv.net/*/artworks/*"],
@@ -92,6 +92,22 @@ function sendImageLink(info, tab) {
     
 }
 
+chrome.runtime.onInstalled.addListener(function() {
+    chrome.storage.sync.set({color: '#3aa757'}, function() {
+        console.log('The color is green.');
+      });
+    chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {
+        chrome.declarativeContent.onPageChanged.addRules([{
+            conditions: [new chrome.declarativeContent.PageStateMatcher({
+                pageUrl : {
+                    hostEquals: 'developer.chrome.com'
+                }
+            })],
+            actions : [new chrome.declarativeContent.ShowPageAction()]
+        }])
+    })
+})
+
 chrome.contextMenus.create({
     title : "Send to Discord",
     contexts : ["image"],
@@ -103,8 +119,4 @@ chrome.contextMenus.create({
     id : "WARFARIN_LINK_001",
     documentUrlPatterns : ["https://*.pixiv.net/*", "https://*.pximg.net/*"]
 });
-
-
-
-
 chrome.contextMenus.onClicked.addListener(sendImageLink);

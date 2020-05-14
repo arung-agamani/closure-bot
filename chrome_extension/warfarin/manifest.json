@@ -3,10 +3,13 @@
     "version": "1.0",
     "description": "Chrome Extension to interact with Closure-bot",
     "manifest_version": 2,
-    "permissions" : ["storage", "contextMenus", "tabs", "http://localhost:2000/*"],
+    "permissions" : ["storage", "declarativeContent", "contextMenus", "tabs", "http://localhost:2000/*"],
     "background" : {
         "scripts" : ["background.js"],
         "persistent" : false
     },
-    "web_accessible_resources" : ["tags.json"]
+    "web_accessible_resources" : ["tags.json"],
+    "page_action" : {
+        "default_popup" : "popup.html"
+    }
   }
