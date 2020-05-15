@@ -87,6 +87,31 @@ class Closure {
         
     }
 
+    getGuildInfo(guild_id, callback) {
+        if (guild_id.match(/^\d*$/)) {
+            let jsonResponse = {};
+            if (this.client.guilds.cache.has(guild_id)) {
+                let targetGuild = this.client.guilds.cache.get(guild_id);
+                jsonResponse.status = 200;
+                jsonResponse.name = targetGuild.name;
+                jsonResponse.icon = targetGuild.iconURL();
+                callback(jsonResponse);
+            } else {
+                jsonResponse.status = 404;
+                jsonResponse.message = "Guild not found or Closure is not in the guild, yet";
+                callback(jsonResponse);
+            }
+            
+        } else {
+            callback({
+                status : 400,
+                message : "Bad guild_id request"
+            });
+            return ;
+        }
+        
+    }
+
     warfarinExtensionHandler(jsonData) {
         // check database for channel mapping.
     }

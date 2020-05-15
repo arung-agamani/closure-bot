@@ -67,6 +67,16 @@ if (process.env.SERVER === '1') {
         })
     })
 
+    server.get('/warfarin/:guild_id/info', (req, res) => {
+        botApp.getGuildInfo(req.params.guild_id, retval => {
+            if (retval.status !== 400) {
+                res.json(retval);
+            } else {
+                res.status(400).send(retval.message);
+            }
+        })
+    })
+
     server.post('/test', (req, res) => {
         if (req.headers['x-github-event'] != undefined) {
             res.json({status : 'from github'});
