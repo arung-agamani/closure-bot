@@ -1,8 +1,6 @@
-// Copyright 2018 The Chromium Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
 'use strict';
+
+let pointedGuildId = '';
 
 let tagsUrl = chrome.runtime.getURL('tags.json');
 let tagsXHR = new XMLHttpRequest();
@@ -66,6 +64,7 @@ function sendImageLink(info, tab) {
         jsonBody.type = "link";
         jsonBody.value = info;
         jsonBody.pageUrl = info.pageUrl;
+        jsonBody.guildId = pointedGuildId;
         xhr.open('POST', 'http://localhost:2000/warfarin');
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.send(JSON.stringify(jsonBody));
@@ -75,6 +74,7 @@ function sendImageLink(info, tab) {
         jsonBody.srcUrl = info.srcUrl;
         jsonBody.linkUrl = info.linkUrl;
         jsonBody.frameUrl = info.frameUrl;
+        jsonBody.guildId = pointedGuildId;
         jsonBody.tag = checkTags(info.menuItemId);
         xhr.open('POST', 'http://localhost:2000/warfarin');
         xhr.setRequestHeader('Content-Type', 'application/json');
@@ -83,6 +83,7 @@ function sendImageLink(info, tab) {
         jsonBody.requestOrigin = "pixiv";
         jsonBody.value = info;
         jsonBody.tag = checkTags(info.menuItemId);
+        jsonBody.guildId = pointedGuildId;
         xhr.open('POST', 'http://localhost:2000/warfarin');
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.send(JSON.stringify(jsonBody));
@@ -120,15 +121,34 @@ chrome.runtime.onInstalled.addListener(function() {
     })
 })
 
+chrome.runtime.onStartup.addListener(() => {
+    chrome.storage.local.get("currentUsedServer", (serverInfo) => {
+        if (serverInfo.guildId !== undefined && serverInfo.guildId.match(/^\d*$/)) {
+            pointedGuildId = serverInfo.guildId;
+            var tags = serverInfo.tags;
+            for (const tagObj of tags) {
+                chrome.contextMenus.create({
+                    title : tagObj,
+                    parentId : "WARFARIN_001",
+                    contexts : ["image"],
+                    documentUrlPatterns : ["https://*.twitter.com/*", "https://twitter.com/*"],
+                    id : "WARFARIN_002_" + tagObj
+                });
+                chrome.contextMenus.create({
+                    title : tagObj,
+                    parentId : "WARFARIN_001",
+                    contexts : ["image", "link"],
+                    documentUrlPatterns : ["https://*.pixiv.net/*/artworks/*"],
+                    id : "WARFARIN_PIXIV_" + tagObj
+                });
+            }
+        }
+    })
+})
+
 chrome.contextMenus.create({
     title : "Send to Discord",
     contexts : ["image"],
     id : "WARFARIN_001"
-});
-chrome.contextMenus.create({
-    title : "Send Pixiv Link to Discord",
-    contexts : ["link"],
-    id : "WARFARIN_LINK_001",
-    documentUrlPatterns : ["https://*.pixiv.net/*", "https://*.pximg.net/*"]
 });
 chrome.contextMenus.onClicked.addListener(sendImageLink);

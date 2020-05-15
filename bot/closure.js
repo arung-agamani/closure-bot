@@ -95,7 +95,12 @@ class Closure {
                 jsonResponse.status = 200;
                 jsonResponse.name = targetGuild.name;
                 jsonResponse.icon = targetGuild.iconURL();
-                callback(jsonResponse);
+                this.getGuildTags(guild_id, resp => {
+                    if (resp.status === 200) {
+                        jsonResponse.tags = resp.tags;
+                    }
+                    callback(jsonResponse);
+                })
             } else {
                 jsonResponse.status = 404;
                 jsonResponse.message = "Guild not found or Closure is not in the guild, yet";

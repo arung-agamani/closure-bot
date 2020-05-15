@@ -23,7 +23,7 @@
                 <div class="col pt-3 m-2 mb-0 pb-3" style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); box-shadow: 0px 10px 10px 0px rgba(128, 128, 128, 0.527);">
                     <div class="media">
                         <img src="medic_logo.png" alt="" srcset="" class="align-self-center mr-3" style="width: 75px; height: 75px;">
-                        <div class="media-body">
+                        <div class="media-body align-self-center">
                             <h3>Warfarin</h3>
                             <p>Invite Closure to your server.</p>
                         </div>
@@ -41,8 +41,22 @@
 
                 </div>
             </div>
+            <div class="row d-none text-danger" id="serverInfoRow">
+                <div class="col m-2 pt-3 pb-3" style="background-color: rgba(255, 255, 255, 0.822);">
+                    <h5>Server Info</h5>
+                    <div class="media">
+                        <img src="medic_logo.png" alt="" id="serverLogoId" srcset="" class="mr-3" style="width: 50px; height: 50px;">
+                        <div class="media-body">
+                            <h5 id="serverNameId">Warfarin</h5>
+                            <p>Available tags : <span id="serverTagsId"></span></p>
+                            
+                        </div>
+                        <input type="button" name="useThisServerButton" id="useThisServerButton" value="Use This Server Info" class="btn btn-danger btn-sm float-right">
+                    </div>
+                </div>
+            </div>
         </div>
       </div>
-      
+      <script src="popup.js"></script>
   </body>
 </html>
