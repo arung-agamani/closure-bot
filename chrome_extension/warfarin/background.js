@@ -49,7 +49,7 @@ function sendImageLink(info, tab) {
         xhr.onreadystatechange = () => {
             if (xhr.readyState === XMLHttpRequest.DONE) {
                 if (xhr.status === 200) {
-                    alert(xhr.responseText);
+                    alert("Posted!");
                 } else {
                     alert("There is a problem with the XHR : " + xhr.status + " : " + xhr.statusText)
                 }

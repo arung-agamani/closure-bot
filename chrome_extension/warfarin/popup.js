@@ -47,10 +47,12 @@ function useServer() {
           title : tagObj,
           parentId : "WARFARIN_001",
           contexts : ["image", "link"],
-          documentUrlPatterns : ["https://*.pixiv.net/*/artworks/*"],
+          documentUrlPatterns : ["https://*.pixiv.net/*/artworks/*", "https://*.pixiv.net/*/"],
           id : "WARFARIN_PIXIV_" + tagObj
       });
     }
+    console.log("Context menu updated!");
+    
   })
   
 }
