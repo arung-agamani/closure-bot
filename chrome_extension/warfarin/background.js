@@ -102,6 +102,18 @@ chrome.runtime.onInstalled.addListener(function() {
                 pageUrl : {
                     hostEquals: 'developer.chrome.com'
                 }
+            }), new chrome.declarativeContent.PageStateMatcher({
+                pageUrl : {
+                    hostContains: 'facebook'
+                }
+            }), new chrome.declarativeContent.PageStateMatcher({
+                pageUrl : {
+                    hostContains: 'twitter'
+                }
+            }), new chrome.declarativeContent.PageStateMatcher({
+                pageUrl : {
+                    hostContains: 'pixiv'
+                }
             })],
             actions : [new chrome.declarativeContent.ShowPageAction()]
         }])
