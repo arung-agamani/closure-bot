@@ -28,24 +28,38 @@ function useServer() {
     alert("Server info updated!");
   });
   // load ke context menu
-  var tags = currentlyRetrievedServerInfo.tags;
-  for (const tagObj of tags) {
+  chrome.contextMenus.removeAll(() => {
     chrome.contextMenus.create({
-        title : tagObj,
-        parentId : "WARFARIN_001",
-        contexts : ["image"],
-        documentUrlPatterns : ["https://*.twitter.com/*", "https://twitter.com/*"],
-        id : "WARFARIN_002_" + tagObj
+      title : "Send to Discord",
+      contexts : ["image"],
+      id : "WARFARIN_001"
     });
-    chrome.contextMenus.create({
-        title : tagObj,
-        parentId : "WARFARIN_001",
-        contexts : ["image", "link"],
-        documentUrlPatterns : ["https://*.pixiv.net/*/artworks/*"],
-        id : "WARFARIN_PIXIV_" + tagObj
-    });
-  }
+    var tags = currentlyRetrievedServerInfo.tags;
+    for (const tagObj of tags) {
+      chrome.contextMenus.create({
+          title : tagObj,
+          parentId : "WARFARIN_001",
+          contexts : ["image"],
+          documentUrlPatterns : ["https://*.twitter.com/*", "https://twitter.com/*"],
+          id : "WARFARIN_002_" + tagObj
+      });
+      chrome.contextMenus.create({
+          title : tagObj,
+          parentId : "WARFARIN_001",
+          contexts : ["image", "link"],
+          documentUrlPatterns : ["https://*.pixiv.net/*/artworks/*"],
+          id : "WARFARIN_PIXIV_" + tagObj
+      });
+    }
+  })
+  
 }
 
 document.getElementById('retrieveButton').addEventListener('click', getServerInfo);
 document.getElementById('useThisServerButton').addEventListener('click', useServer);
+$(document).ready(function(){
+  $('body').on('click', 'a', function(){
+    chrome.tabs.create({url: $(this).attr('href')});
+    return false;
+  });
+});

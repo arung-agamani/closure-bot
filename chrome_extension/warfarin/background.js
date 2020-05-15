@@ -2,7 +2,7 @@
 
 let pointedGuildId = '';
 
-let tagsUrl = chrome.runtime.getURL('tags.json');
+/* let tagsUrl = chrome.runtime.getURL('tags.json');
 let tagsXHR = new XMLHttpRequest();
 let tagsContainer = {};
 tagsXHR.onreadystatechange = () => {
@@ -20,14 +20,14 @@ tagsXHR.onreadystatechange = () => {
                 title : tagObj.tag,
                 parentId : "WARFARIN_001",
                 contexts : ["image", "link"],
-                documentUrlPatterns : ["https://*.pixiv.net/*/artworks/*"],
+                documentUrlPatterns : ["https://*.pixiv.net/*//* artworks *//*"],
                 id : "WARFARIN_PIXIV_" + tagObj.tag
             });
         }
     }
 }
 tagsXHR.open('GET', chrome.runtime.getURL('tags.json'));
-tagsXHR.send();
+tagsXHR.send(); */
 
 function checkOrigin(pageUrl) {
     if (pageUrl.match("facebook")) {
@@ -38,14 +38,9 @@ function checkOrigin(pageUrl) {
 }
 
 function checkTags(menuItemId) {
-    let retval = "";
-    for (const obj of tagsContainer.tags) {
-        if (menuItemId.match(new RegExp(obj.tag, 'i'))) {
-            retval = obj.tag;
-            break;
-        }
-    }
-    return retval;
+    let retval = ""
+    retval = menuItemId;
+    return retval.split('_').pop();
 }
 
 function sendImageLink(info, tab) {
@@ -93,10 +88,44 @@ function sendImageLink(info, tab) {
     
 }
 
+function loadTags() {
+    chrome.storage.local.get('currentUsedServer', (serverInfo) => {
+        if (serverInfo.currentUsedServer.guildId !== undefined && serverInfo.currentUsedServer.guildId.match(/^\d*$/)) {
+            console.log(serverInfo);
+            chrome.contextMenus.create({
+                title : "Send to Discord",
+                contexts : ["image"],
+                id : "WARFARIN_001"
+            });
+            pointedGuildId = serverInfo.currentUsedServer.guildId;
+            var tags = serverInfo.currentUsedServer.tags;
+            for (const tagObj of serverInfo.currentUsedServer.tags) {
+                console.log(tagObj);
+                chrome.contextMenus.create({
+                    title : tagObj,
+                    parentId : "WARFARIN_001",
+                    contexts : ["image"],
+                    documentUrlPatterns : ["https://*.twitter.com/*", "https://twitter.com/*"],
+                    id : "WARFARIN_002_" + tagObj
+                });
+                chrome.contextMenus.create({
+                    title : tagObj,
+                    parentId : "WARFARIN_001",
+                    contexts : ["image", "link"],
+                    documentUrlPatterns : ["https://*.pixiv.net/*/artworks/*", "https://*.pixiv.net/*/"],
+                    id : "WARFARIN_PIXIV_" + tagObj
+                });
+            }
+            console.log("Tags loaded");
+        } else {
+            console.log("Server info not found in storage");
+            console.log(serverInfo.currentUsedServer);
+        }
+    })
+}
+
 chrome.runtime.onInstalled.addListener(function() {
-    chrome.storage.sync.set({color: '#3aa757'}, function() {
-        console.log('The color is green.');
-      });
+    console.log('Reloaded||Installed')
     chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {
         chrome.declarativeContent.onPageChanged.addRules([{
             conditions: [new chrome.declarativeContent.PageStateMatcher({
@@ -119,36 +148,11 @@ chrome.runtime.onInstalled.addListener(function() {
             actions : [new chrome.declarativeContent.ShowPageAction()]
         }])
     })
+    loadTags();
 })
 
 chrome.runtime.onStartup.addListener(() => {
-    chrome.storage.local.get("currentUsedServer", (serverInfo) => {
-        if (serverInfo.guildId !== undefined && serverInfo.guildId.match(/^\d*$/)) {
-            pointedGuildId = serverInfo.guildId;
-            var tags = serverInfo.tags;
-            for (const tagObj of tags) {
-                chrome.contextMenus.create({
-                    title : tagObj,
-                    parentId : "WARFARIN_001",
-                    contexts : ["image"],
-                    documentUrlPatterns : ["https://*.twitter.com/*", "https://twitter.com/*"],
-                    id : "WARFARIN_002_" + tagObj
-                });
-                chrome.contextMenus.create({
-                    title : tagObj,
-                    parentId : "WARFARIN_001",
-                    contexts : ["image", "link"],
-                    documentUrlPatterns : ["https://*.pixiv.net/*/artworks/*"],
-                    id : "WARFARIN_PIXIV_" + tagObj
-                });
-            }
-        }
-    })
+    console.log("Warfarin Deployed");
+    loadTags();
 })
-
-chrome.contextMenus.create({
-    title : "Send to Discord",
-    contexts : ["image"],
-    id : "WARFARIN_001"
-});
 chrome.contextMenus.onClicked.addListener(sendImageLink);
