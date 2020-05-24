@@ -43,6 +43,12 @@ function checkTags(menuItemId) {
     return retval.split('_').pop();
 }
 
+function getPointedGuildId(callback) {
+    chrome.storage.local.get('currentUsedServer', serverInfo => {
+        callback(serverInfo.currentUsedServer.guildId);
+    });
+}
+
 function sendImageLink(info, tab) {
     let xhr = new XMLHttpRequest();
         let jsonBody = {};
@@ -59,10 +65,13 @@ function sendImageLink(info, tab) {
         jsonBody.type = "link";
         jsonBody.value = info;
         jsonBody.pageUrl = info.pageUrl;
-        jsonBody.guildId = pointedGuildId;
-        xhr.open('POST', 'http://localhost:2000/warfarin');
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.send(JSON.stringify(jsonBody));
+        getPointedGuildId(retval => {
+            jsonBody.guildId = retval;
+            xhr.open('POST', 'http://ec2-18-139-226-28.ap-southeast-1.compute.amazonaws.com:2000/warfarin');
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.send(JSON.stringify(jsonBody));
+        })
+        
     } else if (info.menuItemId.match(/002/i)) {
         jsonBody.requestOrigin = checkOrigin(info.pageUrl);
         jsonBody.pageUrl = info.pageUrl;
@@ -71,17 +80,25 @@ function sendImageLink(info, tab) {
         jsonBody.frameUrl = info.frameUrl;
         jsonBody.guildId = pointedGuildId;
         jsonBody.tag = checkTags(info.menuItemId);
-        xhr.open('POST', 'http://localhost:2000/warfarin');
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.send(JSON.stringify(jsonBody));
+        console.log(pointedGuildId);
+        getPointedGuildId(retval => {
+            jsonBody.guildId = retval;
+            xhr.open('POST', 'http://ec2-18-139-226-28.ap-southeast-1.compute.amazonaws.com:2000/warfarin');
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.send(JSON.stringify(jsonBody));
+        })
     } else if (info.menuItemId.match(/pixiv/i)) {
         jsonBody.requestOrigin = "pixiv";
         jsonBody.value = info;
         jsonBody.tag = checkTags(info.menuItemId);
         jsonBody.guildId = pointedGuildId;
-        xhr.open('POST', 'http://localhost:2000/warfarin');
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.send(JSON.stringify(jsonBody));
+        console.log(pointedGuildId);
+        getPointedGuildId(retval => {
+            jsonBody.guildId = retval;
+            xhr.open('POST', 'http://ec2-18-139-226-28.ap-southeast-1.compute.amazonaws.com:2000/warfarin');
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.send(JSON.stringify(jsonBody));
+        })
     } else {
         return;
     }
@@ -98,6 +115,7 @@ function loadTags() {
                 id : "WARFARIN_001"
             });
             pointedGuildId = serverInfo.currentUsedServer.guildId;
+            console.log(pointedGuildId);
             var tags = serverInfo.currentUsedServer.tags;
             for (const tagObj of serverInfo.currentUsedServer.tags) {
                 console.log(tagObj);
