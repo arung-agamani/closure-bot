@@ -1,3 +1,6 @@
+#Warfarin
+bot/database/*.db
+
 # Logs
 logs
 *.log
