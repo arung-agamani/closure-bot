@@ -12,6 +12,7 @@ class Closure {
         this.client.commands = new Discord.Collection();
         this.commandFiles = fs.readdirSync('./bot/commands').filter(file => file.endsWith('.js'));
         this.isDatabaseReady = false;
+        this.musicQueue = new Map();
         this.db = new sqlite.Database(path.resolve(__dirname, 'database', 'warfarin.db'), (err) => {
             if (err) {
                 return console.error(err.message);
@@ -45,6 +46,11 @@ class Closure {
                 msg.reply(`There is an error on that command, Doctor!\nCheck your server log.`);
             }
         });
+
+        this.client.once('reconnecting' , () => {
+            console.log('Reconnecting');
+        });
+
         this.client.login(token);
     }
 
