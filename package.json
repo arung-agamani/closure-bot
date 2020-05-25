@@ -38,6 +38,7 @@
     "ffmpeg": "0.0.4",
     "sequelize": "^5.21.8",
     "sqlite3": "^4.2.0",
+    "yt-search": "^1.1.2",
     "ytdl-core": "^2.1.4"
   },
   "devDependencies": {
