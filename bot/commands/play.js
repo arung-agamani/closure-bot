@@ -19,11 +19,9 @@ module.exports = {
 
         if (args[0].match(ytRegex)) {
             const songInfo = await ytdl.getInfo(args[0]);
-            song = {
-                title : songInfo.title,
-                url : songInfo.video_url,
-                length : songInfo.length_seconds
-            };
+            song.title = songInfo.title;
+            song.url = songInfo.video_url;
+            song.length = songInfo.length_seconds;
             this.enqueue(message, args, botObject, song);
         } else {
             this.search(message, args, botObject);
