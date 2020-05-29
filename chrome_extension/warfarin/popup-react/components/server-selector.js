@@ -5,7 +5,7 @@ class ServerSelector extends Component {
         return (
             <div className="row">
                 <div className="col m-2 pt-3 pb-3 server-selector-base">
-                    <label for="" style={{color : 'rgb(145, 0, 0)'}}>Server Target</label>
+                    <label style={{color : 'rgb(145, 0, 0)'}}>Server Target</label>
                     <div className="input-group mb-3">
                         <input type="text" name="targetGuildId" id="targetGuildId" className="form-control" placeholder="Guild ID here" aria-placeholder="Guild ID here"/>
                         

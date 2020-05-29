@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Plate from './plate'
 import ServerSelector from './server-selector'
+import ServerInfo from './server-info'
 
 class Background extends Component {
     render() {
@@ -8,6 +9,7 @@ class Background extends Component {
             <>
             <Plate></Plate>
             <ServerSelector/>
+            <ServerInfo></ServerInfo>
             </>
         )
     }
