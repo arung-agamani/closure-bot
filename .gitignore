@@ -1,7 +1,8 @@
 #Warfarin
 bot/database/*.db
-chrome_extension/warfarin/popup-build
-chrome_extension/warfarin/popup-build/*
+chrome_extension/warfarin/popup-build/
+chrome_extension/warfarin/popup/
+
 
 # Logs
 logs
