@@ -39,9 +39,12 @@
     "express": "^4.17.1",
     "ffmpeg": "0.0.4",
     "react": "^16.13.1",
+    "react-animations": "^1.0.0",
     "react-dom": "^16.13.1",
+    "react-transition-group": "^4.4.1",
     "sequelize": "^5.21.8",
     "sqlite3": "^4.2.0",
+    "styled-components": "^5.1.1",
     "yt-search": "^1.1.2",
     "ytdl-core": "^2.1.4"
   },

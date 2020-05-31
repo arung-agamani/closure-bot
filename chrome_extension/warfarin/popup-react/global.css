@@ -1,12 +1,19 @@
 body {
     width : 800px;
     height: 600px;
-    background-image: url('./bg.jpg');
+    background-image: url('./bg-compressed.jpg');
     background-position: center;
     background-size: cover;
     overflow: hidden;
     margin: 0 0 0 0;
 }
+
+.panel-base {
+    min-width: 800px;
+    min-height: 600px;
+    background-color: grey;
+}
+
 
 .plate-base {
     color : black;
@@ -17,3 +24,55 @@ body {
 .server-selector-base {
     background-color: rgba(255, 255, 255, 0.815);
 }
+
+.sidebar-base {
+    min-width: 100vw;
+    min-height: 100vh;
+    position: fixed;
+    z-index: 1;
+    left : 0;
+    top : 0;
+    transform: translate3d(-100vw, 0, 0);
+    background-image: url('./sidebar-warfarin.jpg');
+    background-color: black;
+    background-position: right bottom;
+    background-repeat: no-repeat;
+}
+.sidebar-base.sidebar-show {
+    transform: translate3d(0, 0, 0);
+    transition: transform 0.3s;
+}
+.sidebar-base.sidebar-hide {
+    transform: translate3d(-100vw, 0, 0);
+    transition: transform 0.3s;
+}
+
+#sidebarItems p:hover {
+    color: rgb(180, 180, 180);
+}
+
+#roundButton {
+    background-color: rgb(255, 47, 47);
+    margin-bottom: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 10px solid rgb(0, 0, 0);
+    outline: none;
+    transition: all .2s cubic-bezier(0, 1.26, .8, 1.28);
+    position : fixed;
+    transform: translate(0px,275px);
+    z-index: 5;
+  }
+   
+  #roundButton:hover {
+    background-color: rgb(255, 47, 47);
+    cursor: pointer;
+    border-color: rgb(0, 0, 0);
+    transform: translate(0px,275px);
+  }
+   
+  #roundButton:active {
+    border-color: rgb(149, 149, 149);
+    background-color: #FFF;
+  }
