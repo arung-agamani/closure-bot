@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import _utils from './utils';
 
 const SidebarContainer = styled.div`
     min-height : '100vh';
@@ -36,7 +37,7 @@ class Sidebar extends Component {
     }
 
     handleMenuClick(e) {
-        alert(e)
+        this.props.handlePanelPick(e);
     }
 
     render() {
@@ -46,10 +47,9 @@ class Sidebar extends Component {
                     <div className="row">
                         <div className="col" style={{color : 'white', minHeight : '100vh', alignItems : 'center', display : 'flex'}}>
                             <div id="sidebarItems" style={{display : 'inline', textAlign : 'center'}}>
-                                <p onClick={() => this.handleMenuClick(1)}>Warfarin Settings</p>
-                                <p onClick={() => this.handleMenuClick(2)}>Arkbooks Settings</p>
-                                <p onClick={() => this.handleMenuClick(3)}>Closure Settings</p>
-                                <p onClick={() => this.handleMenuClick(4)}>Recruitment Calculator</p>
+                                <p onClick={() => this.handleMenuClick(_utils.PanelTypes.WARFARIN)}>Warfarin Settings</p>
+                                <p onClick={() => this.handleMenuClick(_utils.PanelTypes.CLOSURE)}>Closure Settings</p>
+                                <p onClick={() => this.handleMenuClick(_utils.PanelTypes.RECRUITMENTCALC)}>Recruitment Calculator</p>
                             </div>
                         </div>
                     </div>

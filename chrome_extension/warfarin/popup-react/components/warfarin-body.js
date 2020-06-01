@@ -49,7 +49,7 @@ class Background extends Component {
 
     render() {
         return(
-            <>
+            <div className="container">
             
             <FadeInDown>
                 <Plate/>
@@ -64,7 +64,7 @@ class Background extends Component {
                 </FadeInUp> : null
             }
             
-            </>
+            </div>
         )
     }
 }

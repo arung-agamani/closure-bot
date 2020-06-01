@@ -12,6 +12,7 @@ body {
     min-width: 800px;
     min-height: 600px;
     background-color: grey;
+    overflow: hidden;
 }
 
 
@@ -76,3 +77,31 @@ body {
     border-color: rgb(149, 149, 149);
     background-color: #FFF;
   }
+
+.tagLabel p {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    -webkit-user-select: none;
+}
+
+.tagLabel {
+    box-shadow: grey 0px 10px 10px 0px;
+    transition: background-color 0.5s;
+}
+
+.tagLabel.tag-class {
+    background-color : rgb(0, 0, 0);
+}
+.tagLabel.tag-pos {
+    background-color : rgb(5, 46, 7);
+}
+.tagLabel.tag-affix {
+    background-color : rgb(8, 11, 54);
+}
+.tagLabel.tag-quali {
+    background-color : rgb(39, 6, 28);
+}
+.tagLabel.tag-selected {
+    background-color: rgb(83, 183, 241);
+    transition: background-color 0.5s;
+}
