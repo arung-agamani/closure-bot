@@ -11,7 +11,7 @@ body {
 .panel-base {
     min-width: 800px;
     min-height: 600px;
-    background-color: grey;
+    background-color: rgb(43, 43, 43);
     overflow: hidden;
 }
 

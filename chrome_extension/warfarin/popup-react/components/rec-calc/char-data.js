@@ -79,9 +79,9 @@ const data = [
         "star"	: 1,
         "pos"	: "Melee",
         "class"	: "Guard",
-        "quali"	: "Robot",
+        "quali"	: null,
         "tags"	: [
-            "Support"
+            "Support", "Robot"
             ]
         },
         {
@@ -156,6 +156,7 @@ const data = [
         },
         {
         "opName"	: "Specter",
+        "star" : 5,
         "pos"	: "Melee",
         "class"	: "Guard",
         "quali"	: null,
@@ -745,16 +746,6 @@ const data = [
             "quali" : "Top Op",
             "tags" : [
                 "Support", "Defense", "Healing"
-            ]
-        },
-        {
-            "opName" : "Castle-3",
-            "star" : 1,
-            "pos" : "Melee",
-            "class" : "Guard",
-            "quali" : null,
-            "tags" : [
-                "Robot", "Support"
             ]
         },
         {
