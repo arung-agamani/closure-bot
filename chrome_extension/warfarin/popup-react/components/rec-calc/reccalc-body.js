@@ -5,6 +5,15 @@ import TagResult from './tag-result'
 class RecruitmentCalculator extends Component {
     constructor(props) {
         super(props)
+        this.state = {
+            tags : []
+        }
+        this.handleTagCombination = this.handleTagCombination.bind(this)
+    }
+
+    handleTagCombination(tagArray) {
+        this.setState({tags : tagArray})
+        console.log(tagArray)
     }
 
     render() {
@@ -13,14 +22,12 @@ class RecruitmentCalculator extends Component {
                 <div className="container m-0 p-0" style={{maxWidth : '800px'}}>
                     <div className="row m-0 p-0" style={{width : '100vw'}}>
                         <div className="col-8" id="tagsResultDiv">
-                            <TagResult>
+                            <TagResult tagSelected={this.state.tags}>
 
                             </TagResult>
                         </div>
                         <div className="col-4 p-0" id="tagSelectorDiv">
-                            <TagSelector>
-
-                            </TagSelector>
+                            <TagSelector handleTagCombination={this.handleTagCombination}/>
                         </div>
                     </div>
                 </div>

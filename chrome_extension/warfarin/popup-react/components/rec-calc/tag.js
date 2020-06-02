@@ -21,8 +21,16 @@ class Tag extends Component {
     }
 
     handleTagClicked() {
-        this.setState({
-            selected : !this.state.selected
+        this.props.tagSelect(this.props.labelText, this.props.tagType, cb => {
+            if (cb === 1) {
+                this.setState({
+                    selected : true
+                })
+            } else {
+                this.setState({
+                    selected : false
+                })
+            }
         })
     }
 
