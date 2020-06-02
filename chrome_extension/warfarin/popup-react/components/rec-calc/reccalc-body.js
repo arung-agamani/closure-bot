@@ -13,7 +13,6 @@ class RecruitmentCalculator extends Component {
 
     handleTagCombination(tagArray) {
         this.setState({tags : tagArray})
-        console.log(tagArray)
     }
 
     render() {
@@ -21,7 +20,7 @@ class RecruitmentCalculator extends Component {
             <div className="panel-base">
                 <div className="container m-0 p-0" style={{maxWidth : '800px'}}>
                     <div className="row m-0 p-0" style={{width : '100vw'}}>
-                        <div className="col-8" id="tagsResultDiv">
+                        <div className="col-8 pl-5" id="tagsResultDiv">
                             <TagResult tagSelected={this.state.tags}>
 
                             </TagResult>

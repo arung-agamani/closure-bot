@@ -57,7 +57,7 @@ class TagSelector extends Component {
         const TagAffix1Render = TagAffix1.map((text) => <Tag labelText={text} key={text} tagType="affix" tagSelect={this.handleTagSelectEvent}/>)
         const TagAffix2Render = TagAffix2.map((text) => <Tag labelText={text} key={text} tagType="affix" tagSelect={this.handleTagSelectEvent}/>)
         return(
-            <div className="container" 
+            <div className="container tagSelector" 
             style={{
                 height : '100vh',
                 backgroundColor : 'white'
@@ -66,7 +66,7 @@ class TagSelector extends Component {
                     <div className="col text-center">
                         <div className="container mt-3 text-dark">
                             <h5>Tags</h5>
-                            <p>Pick max 5 tags</p>
+                            <p>Max 5 tags</p>
                         </div>
                     </div>
                 </div>
