@@ -1,5 +1,6 @@
 const dotenv = require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
 const bodyParser = require('body-parser');
 const Closure = require('./bot/closure');
 const botApp = new Closure();
@@ -13,6 +14,7 @@ if (process.env.SERVER === '1') {
     console.log("Starting server.");
     const server = express();
     server.use(bodyParser.json());
+    server.use(cors());
     // server section
     server.get('/', (req, res) => {
         res.send(`Test`);

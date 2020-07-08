@@ -1,19 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux'
 import Warfarin from './components/warfarin-body';
-import Closure from './components/closure-body';
+import Closure from './components/closure/closure-body';
 import RecruitmentCalculator from './components/rec-calc/reccalc-body';
 import Sidebar from './components/sidebar';
 import SidebarButton from './components/sidebar-button';
 import './global.css';
 import { PanelTypes } from './components/utils';
+import store from './store/index'
+import { addArticle } from './actions/index'
+
+window.store = store
+window.addArticle = addArticle
 
 class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             sidebarToggle : false,
-            currentPanel : PanelTypes.RECRUITMENTCALC
+            currentPanel : PanelTypes.CLOSURE
         };
         this.handleSidebarButtonClicked = this.handleSidebarButtonClicked.bind(this);
         this.handlePanelPick = this.handlePanelPick.bind(this);
@@ -39,7 +45,7 @@ class App extends React.Component {
     }
     render() {
         return(
-            <>
+            <Provider store={store}>
                 <SidebarButton sidebarButtonClicked={this.handleSidebarButtonClicked}></SidebarButton>
                 <Sidebar isToggle={this.state.sidebarToggle} handlePanelPick={this.handlePanelPick}/>
                 { 
@@ -55,7 +61,7 @@ class App extends React.Component {
                     null
                 }
                 
-            </>
+            </Provider>
         )
     }
 }

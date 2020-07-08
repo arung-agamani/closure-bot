@@ -27,7 +27,7 @@ class ServerSelector extends Component {
 
     handleServerInfoClick() {
         var guild_id_string = document.getElementById('targetGuildId').value;
-        axios.get('http://ec2-18-139-226-28.ap-southeast-1.compute.amazonaws.com:2000/warfarin/'+guild_id_string+'/info')
+        axios.get('https://closure.howlingmoon.dev/warfarin/'+guild_id_string+'/info')
             .then(response => {
                 if (response.status === 200) {
                     let serverInfo = response.data;
