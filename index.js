@@ -44,7 +44,7 @@ if (process.env.SERVER === '1') {
             console.log(req.body.value);
             if (req.body.value.linkUrl.match(/pximg/i)) {
                 // this is a right click on image
-                botApp.publishLink(req.body.guildId, req.body.tag, req.body.value.pageUrl, req.body.value.linkUrl);
+                botApp.publishLink(req.body.guildId, req.body.tag, req.body.value.pageUrl, req.body.value.srcUrl);
             } else if (req.body.value.linkUrl.match(/pixiv\.net/i)) {
                 // this is a right click on image thumbnail to another artwork
                 botApp.publishLink(req.body.guildId, req.body.tag, req.body.value.linkUrl, req.body.value.srcUrl);
