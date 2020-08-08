@@ -67,7 +67,7 @@ function sendImageLink(info, tab) {
         jsonBody.pageUrl = info.pageUrl;
         getPointedGuildId(retval => {
             jsonBody.guildId = retval;
-            xhr.open('POST', 'http://ec2-18-139-226-28.ap-southeast-1.compute.amazonaws.com:2000/warfarin');
+            xhr.open('POST', 'http://localhost:2000/warfarin');
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.send(JSON.stringify(jsonBody));
         })
@@ -83,7 +83,7 @@ function sendImageLink(info, tab) {
         console.log(pointedGuildId);
         getPointedGuildId(retval => {
             jsonBody.guildId = retval;
-            xhr.open('POST', 'http://ec2-18-139-226-28.ap-southeast-1.compute.amazonaws.com:2000/warfarin');
+            xhr.open('POST', 'http://localhost:2000/warfarin');
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.send(JSON.stringify(jsonBody));
         })
@@ -95,7 +95,7 @@ function sendImageLink(info, tab) {
         console.log(pointedGuildId);
         getPointedGuildId(retval => {
             jsonBody.guildId = retval;
-            xhr.open('POST', 'http://ec2-18-139-226-28.ap-southeast-1.compute.amazonaws.com:2000/warfarin');
+            xhr.open('POST', 'http://localhost:2000/warfarin');
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.send(JSON.stringify(jsonBody));
         })

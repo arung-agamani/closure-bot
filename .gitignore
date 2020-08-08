@@ -1,5 +1,6 @@
 #Warfarin
 bot/database/*.db
+bot/tmp/*
 chrome_extension/warfarin/popup-build/
 chrome_extension/warfarin/popup/
 

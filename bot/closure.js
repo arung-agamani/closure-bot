@@ -5,6 +5,8 @@ const path = require('path');
 const embedMessage = require('./embedMessage');
 const sqlite = require('sqlite3');
 const Sequelize = require('sequelize');
+const request = require('request');
+const axios = require('axios').default;
 
 class Closure {
     constructor() {
@@ -271,17 +273,71 @@ class Closure {
         })
     }
 
-    publishLink(guild_id, tag, link) {
+    publishLink(guild_id, tag, link, pixivTarget) {
         this.db.all(`SELECT g.channel_id FROM Guild_Channel as g, Channel_Tags as c 
         WHERE g.guild_id="${guild_id}" AND g.channel_id=c.channel_id AND c.tags="${tag}";`, (err, rows) => {
-            for (const row of rows) {
-                this.client
-                .guilds.cache.get(guild_id)
-                .channels.cache.get(row.channel_id)
-                .send(link);
+            const doStuff = async () => {
+                const fileName = new Date().getTime().toString();
+                let isFileWritten = false;
+                let imageExt = '';
+                if (pixivTarget) {
+                    imageExt = pixivTarget.split('.').reverse()[0];
+                    const image = await axios({
+                        method: 'get',
+                        url: pixivTarget,
+                        headers: {
+                            referer: link
+                        },
+                        responseType: 'stream'
+                    })
+                    if (image.status === 200) {
+                        const writer = fs.createWriteStream(path.resolve(__dirname, `./tmp/${fileName}.${imageExt}`))
+                        try {
+                            await fileWriter(writer, image.data);
+                            isFileWritten = true;
+                        } catch (err) {
+                            console.log('Error on writing file stream or in promise', err);
+                        }
+                    }
+                }
+                for (const row of rows) {
+                    
+                    if (isFileWritten) {
+                        console.log("File written");
+                        this.client
+                        .guilds.cache.get(guild_id)
+                        .channels.cache.get(row.channel_id)
+                        .send(link, { files: [path.resolve(__dirname, `./tmp/${fileName}.${imageExt}`)]});
+                        
+                    } else {
+                        console.log("No file written");
+                        this.client
+                        .guilds.cache.get(guild_id)
+                        .channels.cache.get(row.channel_id)
+                        .send(link);
+                    }
+                }
             }
+            doStuff();
         });
     }
 }
+
+const fileWriter = (writer, stream) => {
+    return new Promise((resolve, reject) => {
+        stream.pipe(writer);
+        let error = null;
+        writer.on('error', err => {
+            error = err;
+            writer.close();
+            reject(err);
+        });
+        writer.on('close', () => {
+            if (!error) {
+                resolve(true);
+            }
+        })
+    })
+} 
 
 module.exports = Closure;

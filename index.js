@@ -41,12 +41,13 @@ if (process.env.SERVER === '1') {
             let urlObject = new URL(req.body.pageUrl);
             console.log(urlObject.href);
         } else if (req.body.requestOrigin.match(/pixiv/i)) {
+            console.log(req.body.value);
             if (req.body.value.linkUrl.match(/pximg/i)) {
                 // this is a right click on image
-                botApp.publishLink(req.body.guildId, req.body.tag, req.body.value.pageUrl);
+                botApp.publishLink(req.body.guildId, req.body.tag, req.body.value.pageUrl, req.body.value.linkUrl);
             } else if (req.body.value.linkUrl.match(/pixiv\.net/i)) {
                 // this is a right click on image thumbnail to another artwork
-                botApp.publishLink(req.body.guildId, req.body.tag, req.body.value.linkUrl);
+                botApp.publishLink(req.body.guildId, req.body.tag, req.body.value.linkUrl, req.body.value.srcUrl);
             }
             // botApp.publishLink('339763195554299904', req.body.tag, req.body.value.pageUrl);
         }
