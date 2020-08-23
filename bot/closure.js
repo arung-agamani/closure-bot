@@ -8,6 +8,8 @@ const Sequelize = require('sequelize');
 const request = require('request');
 const axios = require('axios').default;
 
+
+
 class Closure {
     constructor() {
         this.client = new Discord.Client();
@@ -22,7 +24,8 @@ class Closure {
                 console.log("Bot connected to database!");
                 this.isDatabaseReady = true;
             }
-        })
+        });
+        this.isDev = process.env.NODE_ENV === 'dev';
     }
 
     start(token) {
@@ -34,7 +37,8 @@ class Closure {
             this.client.commands.set(command.name, command);
         }
         this.client.on('message', msg => {
-            if (!msg.content.startsWith('%^') || msg.author.bot) return;
+            const prefix = this.isDev ? '%!' : '%^'; // add prefix lookup later
+            if (!msg.content.startsWith(prefix) || msg.author.bot) return;
         
             const args = msg.content.slice(2).split(/ +/);
             const command = args.shift().toLowerCase();

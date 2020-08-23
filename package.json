@@ -4,9 +4,12 @@
   "description": "Weeb Discord bot for Github event/actions",
   "main": "index.js",
   "scripts": {
-    "server": "cross-env BOT='0' SERVER='1' node index.js",
-    "bot": "cross-env BOT='1' SERVER='0' node index.js",
-    "both": "cross-env BOT='1' SERVER='1' node index.js",
+    "server": "cross-env BOT='0' SERVER='1' NODE_ENV='prod' node index.js",
+    "server:dev": "cross-env BOT='0' SERVER='1' NODE_ENV='dev' node index.js",
+    "bot": "cross-env BOT='1' SERVER='0' NODE_ENV='prod' node index.js",
+    "bot:dev": "cross-env BOT='1' SERVER='0' NODE_ENV='dev' node index.js",
+    "both": "cross-env BOT='1' SERVER='1' NODE_ENV='prod' node index.js",
+    "both:dev": "cross-env BOT='1' SERVER='1' NODE_ENV='dev' node index.js",
     "webpack-build": "webpack --watch",
     "webpack-server": "webpack-dev-server --open"
   },
@@ -50,7 +53,7 @@
     "sequelize": "^5.21.8",
     "sqlite3": "^4.2.0",
     "styled-components": "^5.1.1",
-    "yt-search": "^1.1.2",
+    "yt-search": "^2.2.2",
     "ytdl-core": "^2.1.4"
   },
   "devDependencies": {

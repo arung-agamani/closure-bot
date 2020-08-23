@@ -74,6 +74,7 @@ module.exports = {
                 user : message.author.id,
                 context : 'music-yt-search'
             };
+            console.log('searching:', queryString);
             const searchResult = await yts(queryString);
             const videos = searchResult.videos.slice(0,6);
             const responseEmbedMessage = new embedMessage();
