@@ -51,7 +51,7 @@ function main(message, args, botObject) {
                                 fs.unlinkSync(path.resolve(destUrl, videoName + '.mp3'));
                                 message.channel.send(`File for ${videoName} with code ${hashfn} has deleted.`);
                                 botObject.ytdlMp3Map.delete(hashfn);
-                            }, 30*1000);
+                            }, 300*1000);
                         })
                         .on('error', (ffmpegErr, stdout, stderr) => {
                             console.log('Error on converting: ', ffmpegErr);
