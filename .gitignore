@@ -1,6 +1,8 @@
 #Warfarin
+!.gitkeep
 bot/database/*.db
 bot/tmp/*
+bot/tmp/mp3/*
 chrome_extension/warfarin/popup-build/
 chrome_extension/warfarin/popup/
 

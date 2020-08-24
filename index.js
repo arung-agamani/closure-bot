@@ -4,6 +4,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const Closure = require('./bot/closure');
 const botApp = new Closure();
+const path = require('path');
 
 if (process.env.BOT === '1') {
     console.log("Starting bot.");
@@ -15,10 +16,21 @@ if (process.env.SERVER === '1') {
     const server = express();
     server.use(bodyParser.json());
     server.use(cors());
+    // server.use('/ytdl/mp3', express.static(path.resolve(__dirname, 'bot', 'tmp', 'mp3')));
     // server section
     server.get('/', (req, res) => {
         res.send(`Test`);
     });
+
+    server.get('/ytdl/mp3/download', (req, res) => {
+        // console.log(req.query);
+        if (botApp.ytdlMp3Map.has(req.query.f)) {
+            res.download(botApp.ytdlMp3Map.get(req.query.f));
+        } else {
+            res.status(404).send('File not exist or has expired').end();
+        }
+        
+    })
 
     server.post('/closure', (req, res) => {
         // res.send('okay dokutah');

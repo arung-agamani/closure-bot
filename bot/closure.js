@@ -8,6 +8,10 @@ const Sequelize = require('sequelize');
 const request = require('request');
 const axios = require('axios').default;
 
+const closureConfig = {
+    basePath: path.resolve(__dirname)
+};
+
 
 
 class Closure {
@@ -26,6 +30,8 @@ class Closure {
             }
         });
         this.isDev = process.env.NODE_ENV === 'dev';
+        this.basePath = closureConfig.basePath;
+        this.ytdlMp3Map = new Map();
     }
 
     start(token) {
