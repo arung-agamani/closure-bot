@@ -5,12 +5,12 @@ const ffmpeg = require('fluent-ffmpeg');
 const crypto = require('crypto');
 const DEmbed = require('discord.js').MessageEmbed;
 
-const BaseEmbedMessage = (videoTitle, thumbnailUrl, authorId) => {
+const BaseEmbedMessage = (videoTitle, thumbnailUrl, author) => {
     return new DEmbed()
             .setTitle(`Closure's Youtube to MP3 Downloader`)
             .setDescription(`Downloading ${videoTitle}`)
             .setImage(thumbnailUrl)
-            .setFooter(`Task initiated by <@${authorId}>`)
+            .setFooter(`Task initiated by ${author.username}`, author.avatarURL())
 } 
 const DownloadEmbedMessage = (progress, base) => {
     return new DEmbed(base)
@@ -25,7 +25,6 @@ const ConvertEmbedMessage = (progress, base) => {
 
 const ServingEmbedMessage = (urlPath, base) => {
     return new DEmbed(base)
-                .addField('Download Complete!', 'Now converting...')
                 .addField('Conversion Complete!', 'Done')
                 .addField('Serving File', `Visit or click ${urlPath} \nFile expires in 5 minutes`);
 }
@@ -58,7 +57,7 @@ function main(message, args, botObject) {
                     let downloadLogHandler = null;
                     const videoWritableStream = fs.createWriteStream(filePath);
                     const stream = videoReadableStream.pipe(videoWritableStream);
-                    const msgBaseEmbed = BaseEmbedMessage(info.videoDetails.title, null);
+                    const msgBaseEmbed = BaseEmbedMessage(info.videoDetails.title, null, message.author);
                     console.log('Start downloading video.');
                     videoReadableStream.once('progress', () => {
                         console.log('Starting to receive data stream!');
@@ -101,7 +100,7 @@ function main(message, args, botObject) {
                                 botObject.ytdlMp3Map.set(hashfn, path.resolve(destUrl, videoName + '.mp3'));
                                 msg.edit(ServingEmbedMessage(`https://closure.howlingmoon.dev/ytdl/mp3/download?f=${hashfn}`,
                                     BaseEmbedMessage(info.videoDetails.title,
-                                    info.videoDetails.thumbnail.thumbnails[info.videoDetails.thumbnail.thumbnails.length - 1].url)))
+                                    info.videoDetails.thumbnail.thumbnails[info.videoDetails.thumbnail.thumbnails.length - 1].url, message.author)))
                                 fs.unlinkSync(filePath);
                                 setTimeout(() => {
                                     fs.unlinkSync(path.resolve(destUrl, videoName + '.mp3'));
