@@ -10,9 +10,13 @@ function main(message, args, botObject) {
         message.channel.send(`Poggers, valid URL. Processing...`).then((msg) => {
             const videoUrl = args[0];
             const destUrl = path.resolve(botObject.basePath, 'tmp', 'mp3');
-            const videoReadableStream = ytdl(videoUrl, { filter: 'audioonly', quality: 'highestaudio' });
-
+            const videoReadableStream = ytdl(videoUrl, { filter: 'audioonly', quality: 'highestaudio'});
+            
             ytdl.getInfo(videoUrl).then(info => {
+                if (info.formats.some(frmt => frmt.live)) {
+                    msg.edit(`Pepega, it's a live video. Nope.\nAtomic Abortion starts...  <@${message.author.id}>`);
+                    return;
+                }
                 if (parseInt(info.length_seconds) > 600) {
                     msg.edit(`Pepega, video length is too long. Maximum 10 minutes.\nAtomic Abortion starts...  <@${message.author.id}>`);
                     return;
