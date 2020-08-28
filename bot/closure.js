@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const embedMessage = require('./embedMessage');
 const sqlite = require('sqlite3');
-const Sequelize = require('sequelize');
+const { Sequelize } = require('sequelize');
 const request = require('request');
 const axios = require('axios').default;
 
@@ -29,6 +29,7 @@ class Closure {
                 this.isDatabaseReady = true;
             }
         });
+        this.remoteDb = new Sequelize(`mysql://${process.env.MYSQL_USERNAME}:${process.env.MYSQL_PASSWORD}@${process.env.MYSQL_HOST}`);
         this.isDev = process.env.NODE_ENV === 'dev';
         this.basePath = closureConfig.basePath;
         this.ytdlMp3Map = new Map();
@@ -37,6 +38,12 @@ class Closure {
     start(token) {
         this.client.on('ready', () => {
             console.log(`Logged in as ${this.client.user.tag}!`);
+            this.client.user.setPresence({
+                activity: {
+                    name: `${this.client.guilds.cache.size} insane doctors.`,
+                    type: 'WATCHING'
+                }, status: 'online'
+            })
         });
         for (const file of this.commandFiles) {
             const command = require(`./commands/${file}`);

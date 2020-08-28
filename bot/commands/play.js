@@ -36,7 +36,7 @@ module.exports = {
         }
         const dispatcher = musicQueue.connection
             .play(ytdl(song.url, {
-                quality : 'highestaudio'
+                quality : 'highestaudio', highWaterMark: 1 << 25
             }))
             .on('finish', () => {
                 musicQueue.songs.shift();

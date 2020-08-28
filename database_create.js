@@ -1,4 +1,4 @@
-const sqlite = require('sqlite3');
+/* const sqlite = require('sqlite3');
 const crypto = require('crypto');
 
 const db = new sqlite.Database('./bot/database/warfarin.db', (err) => {
@@ -35,4 +35,12 @@ function createChannelTagsTable() {
         }
         console.log("Guild_Channel table created!");
     });
-}
+} */
+const { v1: uuid } = require('uuid');
+const WarfarinDb = require('./bot/database/index');
+require('dotenv').config();
+const warfDb = new WarfarinDb();
+setTimeout(() => {
+    warfDb.BotReaction_insert('112233445566', 'pog', 'abcd pog', 'awoo');
+}, 2000);
+// warfDb.BotReaction_insert('112233445566', 'pog', 'abcd pog', 'awoo');
