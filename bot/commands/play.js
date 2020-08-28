@@ -79,13 +79,83 @@ module.exports = {
             const videos = searchResult.videos.slice(0,6);
             const responseEmbedMessage = new embedMessage();
             responseEmbedMessage.setTitle(`Showing top ${videos.length} search result!`);
-            responseEmbedMessage.setDescription(`Reply this message using %^play <your number of choice>`);
+            responseEmbedMessage.setDescription(`Reply this message using %^play <your number of choice> or by reacting in 30 seconds `);
             for (let i = 0; i < videos.length; i++) {
                 responseEmbedMessage.addField(`${i + 1}. ${videos[i].title} **${videos[i].duration}**`, videos[i].url);
             }
             searchingUser.set(message.author.id, videos);
             //console.log('Search result returns ' + videos.length + ' items');
-            message.channel.send(responseEmbedMessage);
+            let msgChoosePtr = null;
+            message.channel.send(responseEmbedMessage)
+            .then((msg) => { msg.react('1⃣'); msgChoosePtr = msg})
+            .then(() => { msgChoosePtr.react('2⃣')})
+            .then(() => { msgChoosePtr.react('3⃣')})
+            .then(() => { msgChoosePtr.react('4⃣')})
+            .then(() => { msgChoosePtr.react('5⃣')})
+            .then(() => { msgChoosePtr.react('6⃣')})
+            .then(() => {
+                msgChoosePtr.awaitReactions((reaction, user) => {
+                    // console.log(reaction.emoji);
+                    if (user.id !== message.author.id) {
+                        return false;
+                    } else {
+                        if (reaction.emoji.name === '1⃣' || 
+                            reaction.emoji.name === '2⃣' || 
+                            reaction.emoji.name === '3⃣' || 
+                            reaction.emoji.name === '4⃣' || 
+                            reaction.emoji.name === '5⃣' || 
+                            reaction.emoji.name === '6⃣') {
+                            // console.log('Valid user and reaction target')
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                }, { max: 1, time: 30000, errors:['time']})
+                .then((collected) => {
+                    const reaction = collected.first();
+                    let choosenIndex = null;
+                    switch (reaction.emoji.name) {
+                        case '1⃣':
+                            choosenIndex = 1;
+                            break;
+                        case '2⃣':
+                            choosenIndex = 2;
+                            break;
+                        case '3⃣':
+                            choosenIndex = 3;
+                            break;
+                        case '4⃣':
+                            choosenIndex = 4;
+                            break;
+                        case '5⃣':
+                            choosenIndex = 5;
+                            break;
+                        case '6⃣':
+                            choosenIndex = 6;
+                            break;
+                        default:
+                            break;
+                    }
+                    if (choosenIndex === null) {
+                        return;
+                    } else {
+                        const idxChoice = choosenIndex - 1;
+                        const videos = searchingUser.get(message.author.id);
+                        const song = { title : '', url : '', length : 0};
+                        song.title = videos[idxChoice].title;
+                        song.url = videos[idxChoice].url;
+                        song.length = videos[idxChoice].length;
+                        searchingUser.delete(message.author.id);
+                        message.channel.send(`Choosing item ${idxChoice+1}: **${song.title}**`);
+                        this.enqueue(message, args, botObject, song);
+                    }
+                })
+                .catch((collected) => {
+                    searchingUser.delete(message.author.id);
+                    // message.channel.send(`Timed out. Try again.`);
+                })
+            });
         }
         
     }, async enqueue(message, args, botObject, song) {
