@@ -2,13 +2,20 @@ const dotenv = require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const Closure = require('./bot/closure');
-const botApp = new Closure();
+// const Closure = require('./bot/closure');
+
 const path = require('path');
+const fs = require('fs');
+// ts section
+import { Request, Response } from 'express';
+import { URL } from 'url';
+import Closure from './bot/closure';
+let botApp: Closure;
 
 if (process.env.BOT === '1') {
+    botApp = new Closure()
     console.log("Starting bot.");
-    botApp.start(process.env.DISCORD_BOT_TOKEN);
+    botApp.start(process.env.DISCORD_BOT_TOKEN || '');
 }
 
 if (process.env.SERVER === '1') {
@@ -18,11 +25,11 @@ if (process.env.SERVER === '1') {
     server.use(cors());
     // server.use('/ytdl/mp3', express.static(path.resolve(__dirname, 'bot', 'tmp', 'mp3')));
     // server section
-    server.get('/', (req, res) => {
+    server.get('/', (req: Request, res: Response) => {
         res.send(`Test`);
     });
 
-    server.get('/ytdl/mp3/download', (req, res) => {
+    server.get('/ytdl/mp3/download', (req: Request, res: Response) => {
         // console.log(req.query);
         if (botApp.ytdlMp3Map.has(req.query.f)) {
             res.download(botApp.ytdlMp3Map.get(req.query.f));
@@ -32,13 +39,13 @@ if (process.env.SERVER === '1') {
         
     })
 
-    server.post('/closure', (req, res) => {
+    server.post('/closure', (req: Request, res: Response) => {
         // res.send('okay dokutah');
-        botApp.sendGithubEmbed(req.body);
+        // botApp.sendGithubEmbed(req.body);
         res.json({status : 200});
     });
 
-    server.post('/warfarin', (req, res) => {
+    server.post('/warfarin', (req: Request, res: Response) => {
         console.log(req.body);
         
         if (req.body.requestOrigin == "Twitter") {
@@ -67,11 +74,11 @@ if (process.env.SERVER === '1') {
         res.send('POST Request 200');
     });
 
-    server.get('/warfarin', (req, res) => {
+    server.get('/warfarin', (req: Request, res: Response) => {
         res.send("GET Request 200")
     });
 
-    server.get('/warfarin/:guild_id/tags', (req, res) => {
+    server.get('/warfarin/:guild_id/tags', (req: Request, res: Response) => {
         botApp.getGuildTags(req.params.guild_id, retval => {
             if (retval.status === 200) {
                 res.json(retval);
@@ -81,7 +88,7 @@ if (process.env.SERVER === '1') {
         })
     })
 
-    server.get('/warfarin/:guild_id/info', (req, res) => {
+    server.get('/warfarin/:guild_id/info', (req: Request, res: Response) => {
         botApp.getGuildInfo(req.params.guild_id, retval => {
             if (retval.status !== 400) {
                 res.json(retval);
@@ -91,7 +98,7 @@ if (process.env.SERVER === '1') {
         })
     })
 
-    server.post('/test', (req, res) => {
+    server.post('/test', (req: Request, res: Response) => {
         if (req.headers['x-github-event'] != undefined) {
             res.json({status : 'from github'});
         } else {
@@ -107,7 +114,7 @@ if (process.env.SERVER === '1') {
 
 // misc functions
 
-function setDefaultChannel(guildID, channelID) {
+function setDefaultChannel(guildID: string, channelID: string) {
     const configFile = JSON.parse(fs.readFileSync('./bot/closure.json'));
     configFile.defaultGuildID = guildID;
     configFile.defaultChannelID = channelID;

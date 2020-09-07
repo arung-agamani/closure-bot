@@ -4,12 +4,12 @@
   "description": "Weeb Discord bot for Github event/actions",
   "main": "index.js",
   "scripts": {
-    "server": "cross-env BOT='0' SERVER='1' NODE_ENV='prod' node index.js",
-    "server:dev": "cross-env BOT='0' SERVER='1' NODE_ENV='dev' node index.js",
-    "bot": "cross-env BOT='1' SERVER='0' NODE_ENV='prod' node index.js",
-    "bot:dev": "cross-env BOT='1' SERVER='0' NODE_ENV='dev' node index.js",
-    "both": "cross-env BOT='1' SERVER='1' NODE_ENV='prod' node index.js",
-    "both:dev": "cross-env BOT='1' SERVER='1' NODE_ENV='dev' node index.js",
+    "server": "cross-env BOT='0' SERVER='1' NODE_ENV='prod' ts-node index.ts",
+    "server:dev": "cross-env BOT='0' SERVER='1' NODE_ENV='dev' ts-node index.ts",
+    "bot": "cross-env BOT='1' SERVER='0' NODE_ENV='prod' ts-node index.ts",
+    "bot:dev": "cross-env BOT='1' SERVER='0' NODE_ENV='dev' ts-node index.ts",
+    "both": "cross-env BOT='1' SERVER='1' NODE_ENV='prod' ts-node index.ts",
+    "both:dev": "cross-env BOT='1' SERVER='1' NODE_ENV='dev' ts-node index.ts",
     "webpack-build": "webpack --watch",
     "webpack-server": "webpack-dev-server --open"
   },
@@ -35,6 +35,8 @@
   "homepage": "https://github.com/arung-agamani/closure-bot#readme",
   "dependencies": {
     "@discordjs/opus": "^0.3.2",
+    "@types/express": "^4.17.7",
+    "@types/sqlite3": "^3.1.6",
     "axios": "^0.19.2",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
@@ -56,6 +58,7 @@
     "sequelize": "^5.22.3",
     "sqlite3": "^4.2.0",
     "styled-components": "^5.1.1",
+    "ts-node": "^9.0.0",
     "uuid": "^8.3.0",
     "yt-search": "^2.2.2",
     "ytdl-core": "^3.2.2"

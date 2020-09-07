@@ -1,24 +1,55 @@
-const Discord = require('discord.js');
+import * as Discord from 'discord.js';
 const MessageEmbed = require('discord.js').MessageEmbed;
-const fs = require('fs');
+import * as fs from 'fs';
 const path = require('path');
 const embedMessage = require('./embedMessage');
-const sqlite = require('sqlite3');
+import * as sqlite from 'sqlite3'
 const { Sequelize } = require('sequelize');
 const request = require('request');
-const axios = require('axios').default;
+import axios from 'axios';
+import * as ts from 'typescript';
+
+import { } from 'discord.js/typings';
 
 const closureConfig = {
     basePath: path.resolve(__dirname)
 };
 
+export interface ClosureJSONRes {
+    status?: number;
+    error?: Error;
+    tags?: Array<string>
+}
 
+export interface ClosureGuildRes {
+    status?: number;
+    name?: string;
+    icon?: string | null;
+    message?: string;
+    tags?: any;
+}
+
+// export interface ClosureClient extends Discord.Client {
+//     commands: Discord.Collection<any, any>;
+// }
 
 class Closure {
-    constructor() {
-        this.client = new Discord.Client();
-        this.client.commands = new Discord.Collection();
+    public client: Discord.Client;
+    public commands: Discord.Collection<any, any>;
+    public commandFiles: any;
+    public commandFilesTs: string[];
+    public isDatabaseReady: boolean;
+    public musicQueue: Map<any, any>;
+    public db: sqlite.Database;
+    public remoteDb: any;
+    public isDev: boolean;
+    public basePath: any;
+    public ytdlMp3Map: Map<any, any>;
+    public constructor() {
+        this.client = new Discord.Client()
+        this.commands = new Discord.Collection();
         this.commandFiles = fs.readdirSync('./bot/commands').filter(file => file.endsWith('.js'));
+        this.commandFilesTs = fs.readdirSync('./bot/commands').filter(file => file.endsWith('.ts'));
         this.isDatabaseReady = false;
         this.musicQueue = new Map();
         this.db = new sqlite.Database(path.resolve(__dirname, 'database', 'warfarin.db'), (err) => {
@@ -35,10 +66,10 @@ class Closure {
         this.ytdlMp3Map = new Map();
     }
 
-    start(token) {
+    start(token: string) {
         this.client.on('ready', () => {
-            console.log(`Logged in as ${this.client.user.tag}!`);
-            this.client.user.setPresence({
+            console.log(`Logged in as ${this.client.user?.tag}!`);
+            this.client.user?.setPresence({
                 activity: {
                     name: `${this.client.guilds.cache.size} insane doctors.`,
                     type: 'WATCHING'
@@ -47,18 +78,26 @@ class Closure {
         });
         for (const file of this.commandFiles) {
             const command = require(`./commands/${file}`);
-            this.client.commands.set(command.name, command);
+            this.commands.set(command.name, command);
+        }
+        for (const file of this.commandFilesTs) {
+            const command = import(`./commands/${file}`).then(fileCmd => {
+                console.log(`Loaded file with info : ${fileCmd.name}`);
+                this.commands.set(fileCmd.name, fileCmd);
+            }).catch(err => {
+                console.error(`Error loading file with name : ${file}`);
+            })
         }
         this.client.on('message', msg => {
             const prefix = this.isDev ? '%!' : '%^'; // add prefix lookup later
             if (!msg.content.startsWith(prefix) || msg.author.bot) return;
         
             const args = msg.content.slice(2).split(/ +/);
-            const command = args.shift().toLowerCase();
-            if (!this.client.commands.has(command)) return;
+            const command = args.shift()?.toLowerCase();
+            if (!this.commands.has(command)) return;
         
             try {
-                this.client.commands.get(command).execute(msg, args, this);
+                this.commands.get(command).execute(msg, args, this);
             } catch (error) {
                 console.error(`Error in executing "${command}" command!`);
                 console.error(error.message);
@@ -66,22 +105,80 @@ class Closure {
             }
         });
 
-        this.client.once('reconnecting' , () => {
+        /* this.client.once('reconnecting' , () => {
             console.log('Reconnecting');
-        });
+        }); */
 
         this.client.login(token);
     }
 
-    log(text) {
+    public reload_REQUIRE(): Promise<any> {
+        this.commandFilesTs = fs.readdirSync('./bot/commands').filter(file => file.endsWith('.ts'));
+        return new Promise((res, rej) => {
+            for (const file of this.commandFilesTs) {
+                /* const command = import(`./commands/${file}`).then(fileCmd => {
+                    console.log(`Loaded file with info : ${fileCmd.name}`);
+                    this.commands.set(fileCmd.name, fileCmd);
+                }).catch(err => {
+                    console.error(`Error loading file with name : ${file}`);
+                }) */
+                try {
+                    const command = require(`./commands/${file}`);
+                    let code = fs.readFileSync(path.resolve(__dirname, 'commands', file)).toString();
+                    let result: any = eval(ts.transpile(code));
+                    let objCode: any = {
+                        execute: result
+                    };
+                    this.commands.set(command.name, objCode);
+                } catch (err) {
+                    console.error(err);
+                    rej();
+                    break;
+                }
+            }
+            res();
+        })
+        
+    }
+
+    public reload(): Promise<any> {
+        return new Promise((res, rej) => {
+            const promises_array: Array<Promise<any>> = [];
+            for (const file of this.commandFilesTs) {
+                /* const command = import(`./commands/${file}`).then(fileCmd => {
+                    console.log(`Loaded file with info : ${fileCmd.name}`);
+                    this.commands.set(fileCmd.name, fileCmd);
+                }).catch(err => {
+                    console.error(`Error loading file with name : ${file}`);
+                }) */
+                const command = import(`./commands/${file}`);
+                promises_array.push(command);
+            }
+            Promise.all(promises_array).then((values) => {
+                for (const cmd of values) {
+                    console.log(`Loaded file with info: ${cmd.name}`);
+                    console.log(`Function: ${cmd.execute.toString()}`)
+                    this.commands.delete(cmd.name);
+                    this.commands.set(cmd.name, cmd);
+                }
+                res();
+            }).catch(err => {
+                console.error(`Error loading file...`);
+                rej();
+            })
+            
+        })        
+    }
+
+    log(text: string) {
         console.log(text);
     }
 
-    getGuildTags(guild_id, callback) {
+    getGuildTags(guild_id: string, callback: { (resp: any): void; (retval: any): void; (arg0: ClosureJSONRes): void; }) {
         if (guild_id.match(/^\d*$/)) {
             let sqlQuery = `SELECT c.tags FROM Guild_Channel as g, Channel_Tags as c WHERE g.guild_id="${guild_id}" 
             AND g.channel_id=c.channel_id`;
-            let jsonResponse = {};
+            let jsonResponse: ClosureJSONRes = {};
             this.db.all(sqlQuery, (err, rows) => {
                 if (err) {
                     console.error(err.message);
@@ -91,7 +188,7 @@ class Closure {
                 }
                 jsonResponse.status = 200;
                 let tags = [];
-                let tagsSet = new Set();
+                let tagsSet = new Set<string>();
                 for (const row of rows) {
                     // if (!tags.some(x => x.tags === row.tags)){
                     //     tags.push(row);
@@ -112,14 +209,14 @@ class Closure {
         
     }
 
-    getGuildInfo(guild_id, callback) {
+    getGuildInfo(guild_id: string, callback: { (retval: any): void; (arg0: ClosureGuildRes): void; }) {
         if (guild_id.match(/^\d*$/)) {
-            let jsonResponse = {};
+            let jsonResponse: ClosureGuildRes = {};
             if (this.client.guilds.cache.has(guild_id)) {
                 let targetGuild = this.client.guilds.cache.get(guild_id);
                 jsonResponse.status = 200;
-                jsonResponse.name = targetGuild.name;
-                jsonResponse.icon = targetGuild.iconURL();
+                jsonResponse.name = targetGuild?.name;
+                jsonResponse.icon = targetGuild?.iconURL();
                 this.getGuildTags(guild_id, resp => {
                     if (resp.status === 200) {
                         jsonResponse.tags = resp.tags;
@@ -142,11 +239,11 @@ class Closure {
         
     }
 
-    warfarinExtensionHandler(jsonData) {
+    warfarinExtensionHandler(jsonData: any) {
         // check database for channel mapping.
     }
 
-    registerChannel(guild_id, channel_id, registrar, tags, callback) {
+    registerChannel(guild_id: string, channel_id: string, registrar: string, tags: string, callback) {
         // check if guild__id and channel_id exists in Guild_Channel table
         if (tags == '' || tags === undefined) {
             callback({
@@ -238,7 +335,7 @@ class Closure {
         
     }
 
-    deleteTag(guild_id, channel_id, tags, callback) {
+    deleteTag(guild_id: string, channel_id: string, tags: string, callback) {
         this.db.run(`DELETE FROM Channel_Tags WHERE channel_id="${channel_id}" 
         AND tags="${tags}";`, (err) => {
             if (err) {
@@ -257,7 +354,7 @@ class Closure {
         })
     }
 
-    checkChannelTags(guild_id, channel_id, callback) {
+    checkChannelTags(guild_id: string, channel_id: string, callback) {
         this.db.all(`SELECT g.guild_id, c.channel_id, c.tags FROM Guild_Channel as g, Channel_Tags as c WHERE 
         g.guild_id="${guild_id}" AND g.channel_id="${channel_id}" 
         AND g.channel_id=c.channel_id;`, (err, rows) => {
@@ -278,19 +375,18 @@ class Closure {
         })
     }
 
-    publishEvent(guild_id, tag) {
+    publishEvent(guild_id: string, tag: string) {
         this.db.all(`SELECT g.channel_id FROM Guild_Channel as g, Channel_Tags as c 
         WHERE g.guild_id="${guild_id}" AND g.channel_id=c.channel_id AND c.tags="${tag}";`, (err, rows) => {
             for (const row of rows) {
-                this.client
-                .guilds.cache.get(guild_id)
-                .channels.cache.get(row.channel_id)
-                .send("Event broadcasted to this channel because of tag " + tag);
+                const txt = this.client
+                .guilds.cache.get(guild_id)?.channels.cache.get(row.channel_id) as Discord.TextChannel;
+                txt.send("Event broadcasted to this channel because of tag " + tag);
             }
         })
     }
 
-    publishLink(guild_id, tag, link, pixivTarget) {
+    publishLink(guild_id: string, tag: string, link: string, pixivTarget?: string) {
         this.db.all(`SELECT g.channel_id FROM Guild_Channel as g, Channel_Tags as c 
         WHERE g.guild_id="${guild_id}" AND g.channel_id=c.channel_id AND c.tags="${tag}";`, (err, rows) => {
             const doStuff = async () => {
@@ -321,17 +417,15 @@ class Closure {
                     
                     if (isFileWritten) {
                         console.log("File written");
-                        this.client
-                        .guilds.cache.get(guild_id)
-                        .channels.cache.get(row.channel_id)
-                        .send(link, { files: [path.resolve(__dirname, `./tmp/${fileName}.${imageExt}`)]});
+                        const txt = this.client
+                        .guilds.cache.get(guild_id)?.channels.cache.get(row.channel_id) as Discord.TextChannel;
+                        txt.send(link, { files: [path.resolve(__dirname, `./tmp/${fileName}.${imageExt}`)]});
                         
                     } else {
                         console.log("No file written");
-                        this.client
-                        .guilds.cache.get(guild_id)
-                        .channels.cache.get(row.channel_id)
-                        .send(link);
+                        const txt = this.client
+                        .guilds.cache.get(guild_id)?.channels.cache.get(row.channel_id) as Discord.TextChannel;
+                        txt.send(link);
                     }
                 }
             }
@@ -340,10 +434,10 @@ class Closure {
     }
 }
 
-const fileWriter = (writer, stream) => {
+const fileWriter = (writer: fs.WriteStream, stream) => {
     return new Promise((resolve, reject) => {
         stream.pipe(writer);
-        let error = null;
+        let error: Error;
         writer.on('error', err => {
             error = err;
             writer.close();
@@ -357,4 +451,4 @@ const fileWriter = (writer, stream) => {
     })
 } 
 
-module.exports = Closure;
+export default Closure;

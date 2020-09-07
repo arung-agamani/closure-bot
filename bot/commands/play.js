@@ -28,9 +28,9 @@ module.exports = {
         }     
     }, play(guild, song, botObject) {
         const musicQueue = botObject.musicQueue.get(guild.id);
-        if (!song) {
+        if (musicQueue.currentlyPlaying >= musicQueue.songs.length) {
             musicQueue.voiceChannel.leave();
-            musicQueue.textChannel.send('No music in playlist. Aight, Imma head out.');
+            musicQueue.textChannel.send('Reached the end in playlist. Aight, Imma head out.');
             botObject.musicQueue.delete(guild.id);
             return;
         }
@@ -39,8 +39,9 @@ module.exports = {
                 quality : 'highestaudio', highWaterMark: 1 << 25
             }))
             .on('finish', () => {
-                musicQueue.songs.shift();
-                this.play(guild, musicQueue.songs[0], botObject);
+                // musicQueue.songs.shift();
+                musicQueue.currentlyPlaying++;
+                this.play(guild, musicQueue.songs[musicQueue.currentlyPlaying], botObject);
             })
             .on('error', error => {
                 console.error(error);
@@ -171,7 +172,8 @@ module.exports = {
                 connection : null,
                 songs : [],
                 volume: 5,
-                playing : true
+                playing : true,
+                currentlyPlaying : 0,
             };
             botObject.musicQueue.set(message.guild.id, queueConstruct);
             queueConstruct.songs.push(song);
