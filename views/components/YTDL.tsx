@@ -16,22 +16,38 @@ const YTDL: React.FC = () => {
     socket.on('connect', () => {
       console.log('Connected to Socket.IO Server');
       outputRef.current.value += forgeOutputLine("Connected to Socket.IO server");
+      logScroll();
     });
     socket.on('message', data => {
-      outputRef.current.value += forgeInputLine(data)
+      outputRef.current.value += forgeInputLine(data);
+      logScroll();
+    })
+    socket.on('metadata', data => {
+      outputRef.current.value += forgeOutputLine(`Processing video with title: ${data.title}`);
+      logScroll();
     })
     socket.on('download', data => {
       outputRef.current.value += forgeOutputLine(`Download progress: ${data}%`);
+      logScroll();
     })
     socket.on('conversion', data => {
       outputRef.current.value += forgeOutputLine(`Conversion progress: ${data}%`);
+      logScroll();
     })
     socket.on('done', data => {
-      outputRef.current.value += forgeOutputLine(`Done conversion. Access file on ${data}`);
+      outputRef.current.value += forgeOutputLine(`Done conversion. \nNow serving '${data.filename}' on ${data.link} for 5 minutes`);
       setIsDone(true);
-      setAudioUrl(data);
+      setAudioUrl(data.link);
+      logScroll();
+    })
+    socket.on('delete', data => {
+      outputRef.current.value += forgeOutputLine(`${data} is expired.`)
     })
   }, []);
+
+  const logScroll = () => {
+    outputRef.current.scrollTop = outputRef.current.scrollHeight;
+  }
 
   const onButtonClick = () => {
     const url = inputRef.current.value;

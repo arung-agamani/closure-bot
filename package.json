@@ -10,7 +10,8 @@
     "bot:dev": "cross-env BOT='1' SERVER='0' NODE_ENV='dev' ts-node index.ts",
     "both": "cross-env BOT='1' SERVER='1' NODE_ENV='prod' ts-node index.ts",
     "both:dev": "cross-env BOT='1' SERVER='1' NODE_ENV='dev' ts-node index.ts",
-    "webpack-build": "webpack --watch",
+    "webpack-watch": "webpack --watch",
+    "webpack-build": "webpack --mode-production",
     "webpack-server": "webpack-dev-server --open"
   },
   "engines": {

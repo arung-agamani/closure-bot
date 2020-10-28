@@ -43,9 +43,10 @@ const closure = {
     path: path.resolve(__dirname, 'views', 'dist'),
     filename: 'bundle.js',
   },
+  mode: 'production',
   module: {
     rules: [
-      { test: /\.(js)$/, use: 'babel-loader' },
+      // { test: /\.(js)$/, use: 'babel-loader' },
       { test: /\.tsx?$/, use: 'ts-loader', exclude: /node_modules/ },
       { test: /\.css$/, use: ['style-loader', 'css-loader'] },
       { test: /\.(png|svg|jpg|gif)$/, use: ['file-loader'] },
@@ -60,7 +61,7 @@ const closure = {
       template: './views/index.html',
     }),
   ],
-  devtool: 'cheap-module-source-map',
+  // devtool: 'cheap-module-source-map',
   devServer: {
     contentBase: path.resolve(__dirname, 'views', 'dist'),
   },
