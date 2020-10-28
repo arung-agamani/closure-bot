@@ -81,7 +81,7 @@ class YTDLAppSocket {
                     clearInterval(conversionHandler);
                     const hashfn = crypto.randomBytes(4).toString('hex');
                     this.map.set(hashfn, path.resolve(destUrl, videoName + '.mp3'));
-                    socket.emit('done', `http://localhost:2000/ytdl/${hashfn}`);
+                    socket.emit('done', `http://closure.howlingmoon.dev/ytdl/${hashfn}`);
                     fs.unlinkSync(filePath);
                     setTimeout(() => {
                       fs.unlinkSync(path.resolve(destUrl, videoName + '.mp3'));
