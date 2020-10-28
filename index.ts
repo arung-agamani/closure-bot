@@ -1,12 +1,16 @@
 /* eslint-disable no-console */
 // ts section
 import express, { Request, Response } from 'express';
+import http from 'http';
+import path from 'path';
+import socketIO from 'socket.io';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import { URL } from 'url';
 import Closure from './bot/closure';
+import YTDLApp from './web/ytdlApp';
 
-import ytdlRoute from './web/ytdl';
+import ytdlRoute, { setMap } from './web/ytdl';
 
 require('dotenv').config();
 
@@ -26,13 +30,16 @@ if (process.env.BOT === '1') {
 if (process.env.SERVER === '1') {
   console.log('Starting server.');
   const server = express();
+  const httpServer = http.createServer(server);
+
+  const io = socketIO(httpServer);
+  const ytdlMap = new Map<string, string>();
+  const ytdlApp = new YTDLApp(io, ytdlMap);
+  setMap(ytdlMap);
+  ytdlApp.start();
+  
   server.use(bodyParser.json());
   server.use(cors());
-  // server.use('/ytdl/mp3', express.static(path.resolve(__dirname, 'bot', 'tmp', 'mp3')));
-  // server section
-  server.get('/', (req: Request, res: Response) => {
-    res.send(`Test`);
-  });
 
   server.use('/ytdl', ytdlRoute);
 
@@ -122,7 +129,15 @@ if (process.env.SERVER === '1') {
     }
   });
 
-  server.listen(2000, () => {
+  server.use('/', express.static(path.resolve(__dirname, 'views', 'dist')));
+  server.get('*', (req: Request, res: Response) => {
+    res.sendFile(path.resolve(__dirname, 'views', 'dist', 'index.html'));
+  })
+
+  /* server.listen(2000, () => {
+    console.log('Server is on at port 2000');
+  }); */
+  httpServer.listen(2000, () => {
     console.log('Server is on at port 2000');
   });
 }

@@ -1,11 +1,12 @@
 {
     "compilerOptions": {
+        "jsx": "react",
         "outDir": "",
         "typeRoots": [
         "node_modules/@types"
         ],
         "esModuleInterop": true,
-        "lib": ["ES6"],
+        "lib": ["ES6", "ESNext", "DOM", "DOM.Iterable"],
         "allowSyntheticDefaultImports": true
     }
 }
