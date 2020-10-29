@@ -90,7 +90,8 @@ class YTDLAppSocket {
                       this.map.set(hashfn, path.resolve(destUrl, videoName + '.mp3'));
                       socket.emit('done', {
                         filename: videoName,
-                        link : `http://closure.howlingmoon.dev/ytdl/${hashfn}`
+                        link : `http://closure.howlingmoon.dev/ytdl/${hashfn}`,
+                        metadata: videoInfo.videoDetails
                       });
                       fs.unlinkSync(filePath);
                       setTimeout(() => {

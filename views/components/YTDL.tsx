@@ -1,14 +1,36 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import socketIO from 'socket.io-client';
+import { VideoDetails } from 'ytdl-core';
 
-const SOCKET_SERVER = '/';
+import Card, {YTDLCardProps} from './YTDLCard';
+
+const SOCKET_SERVER = 'https://closure.howlingmoon.dev/';
+
+interface DownloadedCardProps {
+  downloadLink : string;
+  metadata : YTDLCardProps;
+  isValid: boolean;
+}
+
+const initialDownloadedCardProps: DownloadedCardProps = {
+  downloadLink: '',
+  metadata: null,
+  isValid: false
+}
 
 const YTDL: React.FC = () => {
   const outputRef = useRef<HTMLTextAreaElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [socket, setSocket] = useState<SocketIOClient.Socket>(null);
   const [isDone, setIsDone] = useState<boolean>(false);
+  const [downloaded, setDownloaded] = useState<DownloadedCardProps[]>([initialDownloadedCardProps]);
+  const [recentThumbnail, setRecentThumbnail] = useState<string>('');
+  const [recentTitle, setRecentTitle] = useState<string>('');
+  const [totalCard, setTotalCard] = useState<number>(0);
+  const [recentMetadata, setRecentMetadata] = useState<YTDLCardProps>({
+    videoThumbnail: '', videoTitle: '', downloadLink: ''
+  });
   const [audioUrl, setAudioUrl] = useState<string>('');
   useEffect(() => {
     const socket = socketIO(SOCKET_SERVER);
@@ -24,6 +46,11 @@ const YTDL: React.FC = () => {
     })
     socket.on('metadata', data => {
       outputRef.current.value += forgeOutputLine(`Processing video with title: ${data.title}`);
+      // console.log(data);
+      const videoInfo = data as VideoDetails
+      setRecentThumbnail(videoInfo.thumbnail.thumbnails[0].url);
+      setRecentTitle(videoInfo.title);
+      console.log(recentThumbnail, recentTitle);
       logScroll();
     })
     socket.on('download', data => {
@@ -38,13 +65,24 @@ const YTDL: React.FC = () => {
       outputRef.current.value += forgeOutputLine(`Done conversion. \nNow serving '${data.filename}' on ${data.link} for 5 minutes`);
       setIsDone(true);
       setAudioUrl(data.link);
+      const metadata: YTDLCardProps = {
+        downloadLink: data.link,
+        videoThumbnail: recentThumbnail,
+        videoTitle: recentTitle
+      };
+      setRecentMetadata(metadata);
       logScroll();
+      console.log(downloaded);
+      // pushNewCard(data.link);
+      setTotalCard(totalCard + 1);
     })
     socket.on('delete', data => {
       outputRef.current.value += forgeOutputLine(`${data} is expired.`)
     })
   }, []);
-
+  useEffect(() => {
+    pushNewCard();
+  }, [totalCard]);
   const logScroll = () => {
     outputRef.current.scrollTop = outputRef.current.scrollHeight;
   }
@@ -53,6 +91,18 @@ const YTDL: React.FC = () => {
     const url = inputRef.current.value;
     outputRef.current.value += forgeOutputLine(`Passing message to server: ${url}`);
     socket.emit('init url', url);
+  }
+
+  const pushNewCard = () => {
+    const arr = [...downloaded];
+    const metadata: YTDLCardProps = recentMetadata
+    arr.push({
+      downloadLink: metadata.downloadLink,
+      metadata: metadata,
+      isValid: true
+    });
+    console.log(arr)
+    setDownloaded(arr);
   }
 
   const onDownload = () => {
@@ -86,6 +136,11 @@ const YTDL: React.FC = () => {
         <textarea name="output-area" id="output-area" ref={outputRef} rows={10}></textarea>
       </div>
       {isDone && <div className="button" onClick={():void => onDownload()}>Download</div>}
+      <div className="card-container">
+        {downloaded && downloaded.map(item => {
+          if (item.isValid) return <Card downloadLink={item.downloadLink} videoThumbnail={item.metadata.videoThumbnail} videoTitle={item.metadata.videoTitle} key={item.downloadLink}/>
+        })}
+      </div>
     </Wrapper>
   );
 };
