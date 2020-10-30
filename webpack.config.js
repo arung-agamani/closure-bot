@@ -55,7 +55,9 @@ const closure = {
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
   },
-  mode: 'development',
+  optimization: {
+    minimize: true,
+  },
   plugins: [
     new HtmlWebpackPlugin({
       template: './views/index.html',

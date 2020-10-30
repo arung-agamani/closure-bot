@@ -3,121 +3,113 @@ import styled from 'styled-components';
 import socketIO from 'socket.io-client';
 import { VideoDetails } from 'ytdl-core';
 
-import Card, {YTDLCardProps} from './YTDLCard';
+import Card, { YTDLCardProps } from './YTDLCard';
 
 const SOCKET_SERVER = 'https://closure.howlingmoon.dev/';
 
 interface DownloadedCardProps {
-  downloadLink : string;
-  metadata : YTDLCardProps;
+  downloadLink: string;
+  metadata: YTDLCardProps;
   isValid: boolean;
 }
 
 const initialDownloadedCardProps: DownloadedCardProps = {
   downloadLink: '',
   metadata: null,
-  isValid: false
-}
+  isValid: false,
+};
 
 const YTDL: React.FC = () => {
   const outputRef = useRef<HTMLTextAreaElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [socket, setSocket] = useState<SocketIOClient.Socket>(null);
-  const [isDone, setIsDone] = useState<boolean>(false);
-  const [downloaded, setDownloaded] = useState<DownloadedCardProps[]>([initialDownloadedCardProps]);
-  const [recentThumbnail, setRecentThumbnail] = useState<string>('');
-  const [recentTitle, setRecentTitle] = useState<string>('');
-  const [totalCard, setTotalCard] = useState<number>(0);
-  const [recentMetadata, setRecentMetadata] = useState<YTDLCardProps>({
-    videoThumbnail: '', videoTitle: '', downloadLink: ''
-  });
-  const [audioUrl, setAudioUrl] = useState<string>('');
+  // const [isDone, setIsDone] = useState<boolean>(false);
+  const [downloaded, setDownloaded] = useState<DownloadedCardProps[]>([
+    initialDownloadedCardProps,
+  ]);
+  // const [audioUrl, setAudioUrl] = useState<string>('');
   useEffect(() => {
+    // eslint-disable-next-line no-shadow
     const socket = socketIO(SOCKET_SERVER);
     setSocket(socket);
     socket.on('connect', () => {
-      console.log('Connected to Socket.IO Server');
-      outputRef.current.value += forgeOutputLine("Connected to Socket.IO server");
+      // console.log('Connected to Socket.IO Server');
+      outputRef.current.value += forgeOutputLine('Connected to server');
       logScroll();
     });
-    socket.on('message', data => {
+    socket.on('message', (data) => {
       outputRef.current.value += forgeInputLine(data);
       logScroll();
-    })
-    socket.on('metadata', data => {
-      outputRef.current.value += forgeOutputLine(`Processing video with title: ${data.title}`);
+    });
+    socket.on('metadata', (data) => {
+      outputRef.current.value += forgeOutputLine(
+        `Processing video with title: ${data.title}`
+      );
       // console.log(data);
-      const videoInfo = data as VideoDetails
-      setRecentThumbnail(videoInfo.thumbnail.thumbnails[0].url);
-      setRecentTitle(videoInfo.title);
-      console.log(recentThumbnail, recentTitle);
       logScroll();
-    })
-    socket.on('download', data => {
-      outputRef.current.value += forgeOutputLine(`Download progress: ${data}%`);
+    });
+    socket.on('download', (data) => {
+      outputRef.current.value += forgeOutputLine(
+        `Download progress: ${(parseFloat(data) * 100).toPrecision(2)}%`
+      );
       logScroll();
-    })
-    socket.on('conversion', data => {
-      outputRef.current.value += forgeOutputLine(`Conversion progress: ${data}%`);
+    });
+    socket.on('conversion', (data) => {
+      outputRef.current.value += forgeOutputLine(
+        `Conversion progress: ${(parseFloat(data) * 100).toPrecision(2)}%`
+      );
       logScroll();
-    })
-    socket.on('done', data => {
-      outputRef.current.value += forgeOutputLine(`Done conversion. \nNow serving '${data.filename}' on ${data.link} for 5 minutes`);
-      setIsDone(true);
-      setAudioUrl(data.link);
+    });
+    socket.on('done', (data) => {
+      // setIsDone(true);
+      outputRef.current.value += forgeOutputLine(
+        `Done conversion. \nNow serving '${data.filename}' on ${data.link} for 5 minutes`
+      );
+      // setAudioUrl(data.link);
+      const videoInfo = data.metadata as VideoDetails;
       const metadata: YTDLCardProps = {
         downloadLink: data.link,
-        videoThumbnail: recentThumbnail,
-        videoTitle: recentTitle
+        videoThumbnail: videoInfo.thumbnail.thumbnails[0].url,
+        videoTitle: videoInfo.title,
+        videoId: videoInfo.videoId,
       };
-      setRecentMetadata(metadata);
+      const arr = [...downloaded];
+      arr.push({
+        downloadLink: metadata.downloadLink,
+        metadata,
+        isValid: true,
+      });
+      // console.log(arr);
+      setDownloaded(arr);
       logScroll();
-      console.log(downloaded);
-      // pushNewCard(data.link);
-      setTotalCard(totalCard + 1);
-    })
-    socket.on('delete', data => {
-      outputRef.current.value += forgeOutputLine(`${data} is expired.`)
-    })
+    });
+    socket.on('delete', (data) => {
+      outputRef.current.value += forgeOutputLine(`${data} is expired.`);
+    });
   }, []);
-  useEffect(() => {
-    pushNewCard();
-  }, [totalCard]);
   const logScroll = () => {
     outputRef.current.scrollTop = outputRef.current.scrollHeight;
-  }
+  };
 
   const onButtonClick = () => {
     const url = inputRef.current.value;
-    outputRef.current.value += forgeOutputLine(`Passing message to server: ${url}`);
+    outputRef.current.value += forgeOutputLine(
+      `Passing message to server: ${url}`
+    );
     socket.emit('init url', url);
-  }
+  };
 
-  const pushNewCard = () => {
-    const arr = [...downloaded];
-    const metadata: YTDLCardProps = recentMetadata
-    arr.push({
-      downloadLink: metadata.downloadLink,
-      metadata: metadata,
-      isValid: true
-    });
-    console.log(arr)
-    setDownloaded(arr);
-  }
-
-  const onDownload = () => {
-    window.open(audioUrl, '_blank')
-  }
+  /* const onDownload = () => {
+    window.open(audioUrl, '_blank');
+  }; */
 
   const forgeOutputLine = (input: string): string => {
-    return "> " + input + "\n";
-  }
+    return `> ${input}\n`;
+  };
 
   const forgeInputLine = (input: string): string => {
-    return "< " + input + "\n";
-  }
-
-  
+    return `< ${input}\n`;
+  };
 
   return (
     <Wrapper>
@@ -130,16 +122,40 @@ const YTDL: React.FC = () => {
           className="input-field"
           ref={inputRef}
         />
-        <div className="button" onClick={():void => onButtonClick()}>Get</div>
+        <div className="button" onClick={(): void => onButtonClick()}>
+          Get
+        </div>
       </div>
       <div className="output-field">
-        <textarea name="output-area" id="output-area" ref={outputRef} rows={10}></textarea>
+        <textarea
+          name="output-area"
+          id="output-area"
+          ref={outputRef}
+          rows={10}
+          readOnly
+        ></textarea>
       </div>
-      {isDone && <div className="button" onClick={():void => onDownload()}>Download</div>}
+      {/* {isDone && (
+        <div className="button" onClick={(): void => onDownload()}>
+          Download
+        </div>
+      )} */}
       <div className="card-container">
-        {downloaded && downloaded.map(item => {
-          if (item.isValid) return <Card downloadLink={item.downloadLink} videoThumbnail={item.metadata.videoThumbnail} videoTitle={item.metadata.videoTitle} key={item.downloadLink}/>
-        })}
+        {downloaded &&
+          downloaded.map((item) => {
+            if (item.isValid) {
+              return (
+                <Card
+                  downloadLink={item.downloadLink}
+                  videoThumbnail={item.metadata.videoThumbnail}
+                  videoTitle={item.metadata.videoTitle}
+                  videoId={item.metadata.videoId}
+                  key={item.downloadLink}
+                />
+              );
+            }
+            return null;
+          })}
       </div>
     </Wrapper>
   );
@@ -149,10 +165,13 @@ export default YTDL;
 
 const Wrapper = styled.div`
   width: 100%;
+  max-width: 600px;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  margin: auto;
   text-align: center;
+  font-family: 'Roboto', sans-serif;
 
   .input-link {
     display: flex;
@@ -196,5 +215,9 @@ const Wrapper = styled.div`
     .output-area {
       width: 100%;
     }
+  }
+
+  .card-container {
+    margin-top: 20px;
   }
 `;

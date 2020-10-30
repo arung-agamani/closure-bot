@@ -12,7 +12,8 @@
     "both:dev": "cross-env BOT='1' SERVER='1' NODE_ENV='dev' ts-node index.ts",
     "webpack-watch": "webpack --watch",
     "webpack-build": "webpack --mode-production",
-    "webpack-dev": "webpack-dev-server --open"
+    "webpack-dev": "webpack-dev-server --open",
+    "warfarin-build": "webpack --config webpack.warfarin.js"
   },
   "engines": {
     "node": "12.x"
@@ -75,6 +76,7 @@
     "@types/react-dom": "^16.9.8",
     "@types/socket.io": "^2.1.11",
     "@types/socket.io-client": "^1.4.34",
+    "@typescript-eslint/eslint-plugin": "^4.6.0",
     "@typescript-eslint/parser": "^4.5.0",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.1.0",
