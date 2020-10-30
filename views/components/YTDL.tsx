@@ -63,7 +63,7 @@ const YTDL: React.FC = () => {
       outputRef.current.value += forgeOutputLine(
         `Conversion progress: ${(parseFloat(data.progress) * 100).toPrecision(
           2
-        )}%`
+        )}% for id ${data.id}`
       );
       logScroll();
     });
