@@ -23,11 +23,9 @@ const YTDL: React.FC = () => {
   const outputRef = useRef<HTMLTextAreaElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [socket, setSocket] = useState<SocketIOClient.Socket>(null);
-  // const [isDone, setIsDone] = useState<boolean>(false);
   const [downloaded, setDownloaded] = useState<DownloadedCardProps[]>([
     initialDownloadedCardProps,
   ]);
-  // const [audioUrl, setAudioUrl] = useState<string>('');
   useEffect(() => {
     // eslint-disable-next-line no-shadow
     const socket = socketIO(SOCKET_SERVER);
@@ -41,6 +39,11 @@ const YTDL: React.FC = () => {
       outputRef.current.value += forgeInputLine(data);
       logScroll();
     });
+    socket.on('error', (data) => {
+      outputRef.current.value += forgeOutputLine(
+        `${data.message}, Type: ${data.type}, ID: ${data.id}`
+      );
+    });
     socket.on('metadata', (data) => {
       outputRef.current.value += forgeOutputLine(
         `Processing video with title: ${data.title}`
@@ -50,13 +53,17 @@ const YTDL: React.FC = () => {
     });
     socket.on('download', (data) => {
       outputRef.current.value += forgeOutputLine(
-        `Download progress: ${(parseFloat(data) * 100).toPrecision(2)}%`
+        `Download progress: ${(parseFloat(data.progress) * 100).toPrecision(
+          2
+        )}%`
       );
       logScroll();
     });
     socket.on('conversion', (data) => {
       outputRef.current.value += forgeOutputLine(
-        `Conversion progress: ${(parseFloat(data) * 100).toPrecision(2)}%`
+        `Conversion progress: ${(parseFloat(data.progress) * 100).toPrecision(
+          2
+        )}%`
       );
       logScroll();
     });
@@ -99,10 +106,6 @@ const YTDL: React.FC = () => {
     socket.emit('init url', url);
   };
 
-  /* const onDownload = () => {
-    window.open(audioUrl, '_blank');
-  }; */
-
   const forgeOutputLine = (input: string): string => {
     return `> ${input}\n`;
   };
@@ -133,6 +136,7 @@ const YTDL: React.FC = () => {
           ref={outputRef}
           rows={10}
           readOnly
+          style={{ resize: 'none' }}
         ></textarea>
       </div>
       {/* {isDone && (

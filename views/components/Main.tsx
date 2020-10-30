@@ -1,8 +1,10 @@
 import React from 'react';
 
-import YTDL from './YTDL';
+// import YTDL from './YTDL';
 
-const Main = () => {
+const YTDL = React.lazy(() => import('./YTDL'));
+
+const Main: React.FC = () => {
   return <YTDL />;
 };
 
