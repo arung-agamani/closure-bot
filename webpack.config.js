@@ -57,6 +57,25 @@ const closure = {
   },
   optimization: {
     minimize: true,
+    runtimeChunk: 'single',
+    splitChunks: {
+      chunks: 'all',
+      maxInitialRequests: Infinity,
+      minSize: 100000,
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name(module) {
+            const packageName = module.context.match(
+              /[\\/]node_modules[\\/](.*?)([\\/]|$)/
+            )[1];
+            return `npm.${packageName.replace('@', '')}`;
+          },
+          // name: 'vendor',
+          // chunks: 'initial',
+        },
+      },
+    },
   },
   plugins: [
     new HtmlWebpackPlugin({
