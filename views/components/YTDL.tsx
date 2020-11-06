@@ -4,6 +4,7 @@ import socketIO from 'socket.io-client';
 import { VideoDetails } from 'ytdl-core';
 
 import Card, { YTDLCardProps } from './YTDLCard';
+import { setMap } from '../../web/ytdl';
 
 const SOCKET_SERVER = 'https://closure.howlingmoon.dev/';
 
@@ -26,6 +27,9 @@ const YTDL: React.FC = () => {
   const [downloaded, setDownloaded] = useState<DownloadedCardProps[]>([
     initialDownloadedCardProps,
   ]);
+  const [conversionQueue, setConversionQueue] = useState<Map<string, number>>(
+    new Map<string, number>()
+  );
   useEffect(() => {
     // eslint-disable-next-line no-shadow
     const socket = socketIO(SOCKET_SERVER);
@@ -65,6 +69,9 @@ const YTDL: React.FC = () => {
           2
         )}% for id ${data.id}`
       );
+      const map = conversionQueue;
+      map.set(data.id, data.progress);
+      setConversionQueue(new Map(map));
       logScroll();
     });
     socket.on('done', (data) => {
@@ -80,6 +87,9 @@ const YTDL: React.FC = () => {
         videoTitle: videoInfo.title,
         videoId: videoInfo.videoId,
       };
+      const map = conversionQueue;
+      map.delete(videoInfo.videoId);
+      setConversionQueue(new Map(map));
       const arr = [...downloaded];
       arr.push({
         downloadLink: metadata.downloadLink,
@@ -139,6 +149,11 @@ const YTDL: React.FC = () => {
           style={{ resize: 'none' }}
         ></textarea>
       </div>
+      {[...conversionQueue.keys()].map((id) => {
+        return (
+          <ProgressBar key={id} id={id} progress={conversionQueue.get(id)} />
+        );
+      })}
       {/* {isDone && (
         <div className="button" onClick={(): void => onDownload()}>
           Download
@@ -162,6 +177,26 @@ const YTDL: React.FC = () => {
           })}
       </div>
     </Wrapper>
+  );
+};
+
+interface ProgressBarProps {
+  id: string;
+  progress: number;
+}
+const ProgressBar: React.FC<ProgressBarProps> = (props) => {
+  // eslint-disable-next-line react/prop-types
+  const { id, progress } = props;
+  return (
+    <div className="progress-bar">
+      <p>
+        Conversion for id {id} : {(progress * 100).toPrecision(4)}%
+      </p>
+      <div
+        className="progress-fill"
+        style={{ width: `${(progress * 100).toFixed(0)}%` }}
+      ></div>
+    </div>
   );
 };
 
@@ -203,6 +238,7 @@ const Wrapper = styled.div`
       cursor: pointer;
     }
   }
+
   .button {
     display: flex;
     align-items: center;
@@ -210,6 +246,27 @@ const Wrapper = styled.div`
     height: 50px;
     color: white;
     background-color: #0b223d;
+  }
+
+  .progress-bar {
+    text-align: center;
+    border: 1px solid black;
+    position: relative;
+    display: block;
+    background-color: grey;
+    p {
+      position: relative;
+      float: left;
+      z-index: 1;
+      color: white;
+      padding-left: 10px;
+    }
+    .progress-fill {
+      position: absolute;
+      background-color: green;
+      height: 100%;
+      transition: width 0.25s;
+    }
   }
 
   .output-field {

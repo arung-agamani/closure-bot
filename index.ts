@@ -37,7 +37,7 @@ if (process.env.SERVER === '1') {
   const ytdlApp = new YTDLApp(io, ytdlMap);
   setMap(ytdlMap);
   ytdlApp.start();
-  
+
   server.use(bodyParser.json());
   server.use(cors());
 
@@ -129,10 +129,13 @@ if (process.env.SERVER === '1') {
     }
   });
 
-  server.use('/', express.static(path.resolve(__dirname, 'views', 'dist')));
+  server.use(
+    '/static',
+    express.static(path.resolve(__dirname, 'views', 'dist'))
+  );
   server.get('*', (req: Request, res: Response) => {
     res.sendFile(path.resolve(__dirname, 'views', 'dist', 'index.html'));
-  })
+  });
 
   /* server.listen(2000, () => {
     console.log('Server is on at port 2000');

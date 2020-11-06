@@ -7,6 +7,7 @@
         ],
         "esModuleInterop": true,
         "lib": ["ES6", "ESNext", "DOM", "DOM.Iterable"],
-        "allowSyntheticDefaultImports": true
+        "allowSyntheticDefaultImports": true,
+        "downlevelIteration": true
     }
 }

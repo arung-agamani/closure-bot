@@ -42,6 +42,7 @@ const closure = {
   output: {
     path: path.resolve(__dirname, 'views', 'dist'),
     filename: 'bundle.js',
+    publicPath: 'static/',
   },
   mode: 'production',
   module: {
