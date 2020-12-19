@@ -7,12 +7,13 @@ import socketIO from 'socket.io';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import { URL } from 'url';
+import { config } from 'dotenv';
 import Closure from './bot/closure';
 import YTDLApp from './web/ytdlApp';
 
 import ytdlRoute, { setMap } from './web/ytdl';
 
-require('dotenv').config();
+config();
 
 // const Closure = require('./bot/closure');
 
@@ -67,8 +68,8 @@ if (process.env.SERVER === '1') {
       const twitterUrl = new URL(req.body.linkUrl);
       const { origin } = twitterUrl;
       const paths = twitterUrl.pathname.split('/');
-      const path = paths.slice(0, paths.length - 2).join('/');
-      botApp.publishLink(req.body.guildId, req.body.tag, origin + path);
+      const pathm = paths.slice(0, paths.length - 2).join('/');
+      botApp.publishLink(req.body.guildId, req.body.tag, origin + pathm);
     } else if (req.body.requestOrigin === 'Facebook') {
       const urlObject = new URL(req.body.pageUrl);
       console.log(urlObject.href);

@@ -36,11 +36,15 @@ function createChannelTagsTable() {
         console.log("Guild_Channel table created!");
     });
 } */
-const { v1: uuid } = require('uuid');
-const WarfarinDb = require('./bot/database/index');
-require('dotenv').config();
+// const { v1: uuid } = require('uuid');
+// const WarfarinDb = require('./bot/database/index');
+import { config } from 'dotenv';
+import WarfarinDb from './bot/database/index';
+// require('dotenv').config();
+config();
 const warfDb = new WarfarinDb();
-setTimeout(() => {
+warfDb.UserPlaylist_insert('aaaa', 'bbbb');
+/* setTimeout(() => {
     warfDb.BotReaction_insert('112233445566', 'pog', 'abcd pog', 'awoo');
-}, 2000);
+}, 2000); */
 // warfDb.BotReaction_insert('112233445566', 'pog', 'abcd pog', 'awoo');
