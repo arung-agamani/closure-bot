@@ -43,6 +43,7 @@ export function execute(
     // eslint-disable-next-line consistent-return
     .then(async (res) => {
       const voiceChannel = message.member.voice.channel;
+      console.log(`Loading ${res.length} items to queue`);
       for (const item of res) {
         const song = { title: '', url: '', length: 0 };
         const songInfo = await ytdl.getInfo(item.link);
@@ -70,11 +71,11 @@ export function execute(
             play(message.guild, queueConstruct.songs[0], botObject);
           } catch (err) {
             botObject.musicQueue.delete(message.guild.id);
-            return message.channel.send(err.message);
+            await message.channel.send(err.message);
           }
         } else {
           botObject.musicQueue.get(message.guild.id).songs.push(song);
-          return message.channel.send(
+          await message.channel.send(
             `${song.title} has been added to the queue!`
           );
         }
