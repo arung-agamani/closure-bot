@@ -3,15 +3,18 @@
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 import { Connection, createConnection } from 'typeorm';
 import 'reflect-metadata';
+import dotenv from 'dotenv';
+import path from 'path';
 import { Playlist } from './models/playlist';
 import { PlaylistItem } from './models/playlistItem';
 
+dotenv.config({ path: path.resolve(__dirname, '..', '..', '.env') });
 export const typeormConfig: PostgresConnectionOptions = {
   type: 'postgres',
   host: 'howlingmoon.dev',
   port: 5432,
-  username: process.env.POSTGRES_USERNAME || 'warfarin',
-  password: process.env.POSTGRES_PASSWORD || 'l4mbdA_func7ion',
+  username: process.env.POSTGRES_USERNAME,
+  password: process.env.POSTGRES_PASSWORD,
   database: 'closure',
   logging: true,
   entities: [PlaylistItem, Playlist],
