@@ -516,11 +516,10 @@ class Closure {
   }
 
   cronReminder() {
-    const cronJob = new CronJob('0 30 1 * * *', () => {
+    const cronJob = new CronJob('0 0 7 * * *', () => {
       const chan = this.client.guilds.cache.get('339763195554299904')?.channels.cache.get('705468600340709418') as Discord.TextChannel;
       if (chan) {
-        const currentServerDate = new Date().toTimeString()
-        chan.send(`Testing cron on Makassar time: ${currentServerDate} <@145558597424644097>`)
+        chan.send(`Yo, Dokutah. Wake up! <@145558597424644097>`)
       }
     }, null, false, 'Asia/Makassar')
     cronJob.start()
