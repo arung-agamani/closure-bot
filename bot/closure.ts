@@ -5,6 +5,8 @@ import * as fs from 'fs';
 import * as sqlite from 'sqlite3';
 import axios from 'axios';
 import * as ts from 'typescript';
+import { CronJob } from 'cron';
+
 import WarfarinDb from './database';
 
 const path = require('path');
@@ -130,6 +132,7 @@ class Closure {
         }); */
 
     this.client.login(token);
+    this.cronReminder();
   }
 
   public reload_REQUIRE(): Promise<any> {
@@ -510,6 +513,17 @@ class Closure {
         doStuff();
       }
     );
+  }
+
+  cronReminder() {
+    const cronJob = new CronJob('0 10 1 * * *', () => {
+      const chan = this.client.guilds.cache.get('339763195554299904')?.channels.cache.get('705468600340709418') as Discord.TextChannel;
+      if (chan) {
+        const currentServerDate = new Date().toTimeString()
+        chan.send(`Testing cron on Makassar time: ${currentServerDate} <@145558597424644097>`)
+      }
+    }, null, false, 'Asia/Makassar')
+    cronJob.start()
   }
 }
 

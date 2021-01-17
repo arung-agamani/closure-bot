@@ -16,7 +16,7 @@ export const typeormConfig: PostgresConnectionOptions = {
   username: process.env.POSTGRES_USERNAME,
   password: process.env.POSTGRES_PASSWORD,
   database: 'closure',
-  logging: true,
+  logging: false,
   entities: [PlaylistItem, Playlist],
   synchronize: true,
 };
@@ -69,6 +69,20 @@ class Warfarin {
         names += `- "${item.name}"\n`;
       }
       return `Get playlist done, found playlist names: \n${names}`;
+    } catch (err) {
+      throw new Error(`Error on fetching playlist: ${err}`);
+    }
+  }
+
+  public async getPlaylistAsArray(userId: string): Promise<Playlist[]> {
+    try {
+      const userPlaylist = this.conn.getRepository(Playlist);
+      const playlist = await userPlaylist
+        .createQueryBuilder('playlist')
+        // .leftJoinAndSelect('playlist.items', 'playlist_item')
+        .where('playlist.userId = :userId', { userId })
+        .getMany();
+      return playlist;
     } catch (err) {
       throw new Error(`Error on fetching playlist: ${err}`);
     }

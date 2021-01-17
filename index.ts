@@ -12,6 +12,8 @@ import Closure from './bot/closure';
 import YTDLApp from './web/ytdlApp';
 
 import ytdlRoute, { setMap } from './web/ytdl';
+import discordRoute from './backend/discordOauth';
+import warfarinRoute from './backend/warfarinDb';
 
 config();
 
@@ -43,6 +45,8 @@ if (process.env.SERVER === '1') {
   server.use(cors());
 
   server.use('/ytdl', ytdlRoute);
+  server.use('/api/discord', discordRoute);
+  server.use('/api/warfarin', warfarinRoute);
 
   server.get('/ytdl/mp3/download', (req: Request, res: Response) => {
     // console.log(req.query);
