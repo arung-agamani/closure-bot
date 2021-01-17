@@ -7,6 +7,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { Playlist } from './models/playlist';
 import { PlaylistItem } from './models/playlistItem';
+import { Reminder } from './models/reminder';
 
 dotenv.config({ path: path.resolve(__dirname, '..', '..', '.env') });
 export const typeormConfig: PostgresConnectionOptions = {
@@ -17,7 +18,7 @@ export const typeormConfig: PostgresConnectionOptions = {
   password: process.env.POSTGRES_PASSWORD,
   database: 'closure',
   logging: false,
-  entities: [PlaylistItem, Playlist],
+  entities: [PlaylistItem, Playlist, Reminder],
   synchronize: true,
 };
 
@@ -156,6 +157,69 @@ class Warfarin {
     } catch (err) {
       console.error(err);
       throw new Error(`Error when trying to update playlist: ${err}`);
+    }
+  }
+
+  public async createReminder(
+    userId: string,
+    cronTime: string,
+    content: string,
+    uniqueHash: string
+  ): Promise<string> {
+    try {
+      const reminder = new Reminder();
+      reminder.userId = userId;
+      reminder.cronTime = cronTime;
+      reminder.content = content;
+      reminder.uniqueHash = uniqueHash;
+      await this.conn.manager.save(reminder);
+      return 'Successfully saving new reminder';
+    } catch (error) {
+      throw new Error(`Error when adding new reminder: ${error}`);
+    }
+  }
+
+  public async readReminder(
+    userId: string,
+    uniqueHash: string
+  ): Promise<Reminder> {
+    try {
+      const reminder = this.conn.getRepository(Reminder);
+      const target = await reminder.findOne({ userId, uniqueHash });
+      return target;
+    } catch (error) {
+      throw new Error(`Error when reading reminder: ${error}`);
+    }
+  }
+
+  public async updateReminder(
+    userId: string,
+    cronTime: string,
+    content: string,
+    uniqueHash: string
+  ): Promise<string> {
+    try {
+      const reminder = this.conn.getRepository(Reminder);
+      const target = await reminder.findOne({ userId, uniqueHash });
+      target.cronTime = cronTime;
+      target.content = content;
+      await reminder.save(target);
+      return `Successfully updating your reminder with hash id ${uniqueHash}`;
+    } catch (error) {
+      throw new Error(`Error when updating reminder: ${error}`);
+    }
+  }
+
+  public async deleteReminder(
+    userId: string,
+    uniqueHash: string
+  ): Promise<string> {
+    try {
+      const reminder = this.conn.getRepository(Reminder);
+      await reminder.delete({ userId, uniqueHash });
+      return `Successfully deleting your reminder with has id ${uniqueHash}`;
+    } catch (error) {
+      throw new Error(`Error when deleting reminder: ${error}`);
     }
   }
 }
