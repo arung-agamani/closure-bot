@@ -516,7 +516,7 @@ class Closure {
   }
 
   cronReminder() {
-    const cronJob = new CronJob('0 10 1 * * *', () => {
+    const cronJob = new CronJob('0 30 1 * * *', () => {
       const chan = this.client.guilds.cache.get('339763195554299904')?.channels.cache.get('705468600340709418') as Discord.TextChannel;
       if (chan) {
         const currentServerDate = new Date().toTimeString()
