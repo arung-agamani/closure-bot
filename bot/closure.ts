@@ -84,7 +84,7 @@ class Closure {
   }
 
   start(token: string) {
-    this.client.on('ready', () => {
+    this.client.on('ready', async () => {
       console.log(`Logged in as ${this.client.user?.tag}!`);
       this.client.user?.setPresence({
         activity: {
@@ -522,6 +522,16 @@ class Closure {
         chan.send(`Yo, Dokutah. Wake up! <@145558597424644097>`)
       }
     }, null, false, 'Asia/Makassar')
+    const dailyHobby = new CronJob('0 0 7,14,21 * * *', async () => {
+      const me = await this.client.users.fetch('145558597424644097')
+      if (me) {
+        const embed = new Discord.MessageEmbed()
+        embed.addField('Kuliah stuffs', 'Jangan lupa presensi ama catat apa yang mau dilakuin besok.\nIngat PR dan hal hal lainnya');
+        embed.addField('Hobby stuffs', '1. Hobi yang membuatmu sehat: null :(\n2. Hobi yang membuatmu belajar: Ngoding gans, 2 jam aja.\n3. Hobi yang membuatmu produktif: Go nggambar atau ngedit hari ini atau bikin game sono.\n4. Hobi yang membuatmu senang: main genshin sana atau apalah. Kalau gacha jangan lupa multitasking. 1 jam cukup.')
+        embed.addField('Tanoto stuffs', 'Ingat proyekan, status proyekan. Ingat ngomong ke anak-anaknya. Jangan denial awas kau.')
+        me.send(embed)
+      }
+    }, null, true, 'Asia/Makassar');
     cronJob.start()
   }
 }
