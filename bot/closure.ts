@@ -531,8 +531,9 @@ class Closure {
         embed.addField('Tanoto stuffs', 'Ingat proyekan, status proyekan. Ingat ngomong ke anak-anaknya. Jangan denial awas kau.')
         me.send(embed)
       }
-    }, null, true, 'Asia/Makassar');
+    }, null, false, 'Asia/Makassar');
     cronJob.start()
+    dailyHobby.start()
   }
 }
 
