@@ -532,8 +532,17 @@ class Closure {
         me.send(embed)
       }
     }, null, false, 'Asia/Makassar');
+    const weeklyAgateReminder = new CronJob('0 0 12 * * 2', async () => {
+      const me = await this.client.users.fetch('145558597424644097')
+      if (me) {
+        const embed = new Discord.MessageEmbed()
+        embed.addField('Agate MKBM', 'Jangan lupa presensi.');
+        me.send(embed)
+      }
+    })
     cronJob.start()
     dailyHobby.start()
+    weeklyAgateReminder.start()
   }
 }
 

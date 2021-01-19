@@ -1,9 +1,36 @@
 import ytdl from 'ytdl-core';
-console.log('initiating get info')
-ytdl.getInfo('https://www.youtube.com/watch?v=2EwbLyG5nQI')
-    .then(info => {
-        console.log(info);
-    })
-    .catch(err => {
-        console.error(err);
-    })
+import ffmpeg from 'fluent-ffmpeg';
+import stream from 'stream';
+import fs from 'fs';
+
+console.log('initiating get info');
+
+const ffmpegPipe = fs.createWriteStream('pipetest.mp3');
+const passStream = new stream.PassThrough();
+
+ytdl('https://www.youtube.com/watch?v=ft-HOsTzQQ4', {
+  filter: 'audioonly',
+})
+  .on('progress', (chunkLength) => {
+    console.log(`[ytdl] chunk downloaded: ${chunkLength}`);
+  })
+  .on('end', () => {
+    console.log('ytdl finished fetching file');
+  })
+  .pipe(passStream);
+
+ffmpeg(passStream)
+  .format('mp3')
+  .audioCodec('libmp3lame')
+  .output(ffmpegPipe)
+  .on('start', () => {
+    console.log('[ffmpeg] starting...');
+  })
+  .on('progress', (frames) => {
+    console.log(`[ffmpeg] has processed frames`);
+    console.log(frames);
+  })
+  .on('end', () => {
+    console.log('Finished?');
+  })
+  .run();
