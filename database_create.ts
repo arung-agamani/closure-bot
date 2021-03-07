@@ -43,7 +43,7 @@ import WarfarinDb from './bot/database/index';
 // require('dotenv').config();
 config();
 const warfDb = new WarfarinDb();
-warfDb.UserPlaylist_insert('aaaa', 'bbbb');
+// warfDb.UserPlaylist_insert('aaaa', 'bbbb');
 /* setTimeout(() => {
     warfDb.BotReaction_insert('112233445566', 'pog', 'abcd pog', 'awoo');
 }, 2000); */

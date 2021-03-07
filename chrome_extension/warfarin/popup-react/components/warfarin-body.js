@@ -1,72 +1,72 @@
-import React, { Component } from 'react'
-import Plate from './plate'
-import ServerSelector from './server-selector'
-import ServerInfo from './server-info'
-import Sidebar from './sidebar'
-import styled, { keyframes } from 'styled-components'
+import React, { Component } from 'react';
+import styled, { keyframes } from 'styled-components';
+import Plate from './plate';
+import ServerSelector from './server-selector';
+import ServerInfo from './server-info';
+// import Sidebar from './sidebar';
 
 const fadeInUpKeyframes = {
-    from : {
-        opacity : 0,
-        transform : 'translate(0px, 50px)'
-    },
-    to : {
-        opacity : 1,
-        transform : 'none'
-    }
-}
+  from: {
+    opacity: 0,
+    transform: 'translate(0px, 50px)',
+  },
+  to: {
+    opacity: 1,
+    transform: 'none',
+  },
+};
 const fadeInDownKeyframes = {
-    from : {
-        opacity : 0,
-        transform : 'translate(0px, -50px)'
-    },
-    to : {
-        opacity : 1,
-        transform : 'none'
-    }
-}
+  from: {
+    opacity: 0,
+    transform: 'translate(0px, -50px)',
+  },
+  to: {
+    opacity: 1,
+    transform: 'none',
+  },
+};
 const fadeInUpAnimation = keyframes`${fadeInUpKeyframes}`;
 const fadeInDownAnimation = keyframes`${fadeInDownKeyframes}`;
 const FadeInUp = styled.div`
-    animation : 0.5s ${fadeInUpAnimation};
+  animation: 0.5s ${fadeInUpAnimation};
 `;
 const FadeInDown = styled.div`
-    animation : 0.5s ${fadeInDownAnimation};
+  animation: 0.5s ${fadeInDownAnimation};
 `;
 
 class Background extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            infoLoaded : false,
-            serverInfo : {}
-        };
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      infoLoaded: false,
+      serverInfo: {},
+    };
+  }
 
-    handleServerSelector(retrievedInfo) {
-        this.setState({infoLoaded : true, info : retrievedInfo});
-    }
+  handleServerSelector(retrievedInfo) {
+    this.setState({ infoLoaded: true, info: retrievedInfo });
+  }
 
-    render() {
-        return(
-            <div className="container">
-            
-            <FadeInDown>
-                <Plate/>
-            </FadeInDown>
-            
-            <FadeInDown>
-                <ServerSelector getServerInfoButtonClick={this.handleServerSelector.bind(this)}/>
-            </FadeInDown>  
-            {
-                this.state.infoLoaded ? <FadeInUp>
-                <ServerInfo serverInfo={this.state.info}></ServerInfo>
-                </FadeInUp> : null
-            }
-            
-            </div>
-        )
-    }
+  render() {
+    return (
+      <div className="container">
+        <FadeInDown>
+          <Plate />
+        </FadeInDown>
+
+        <FadeInDown>
+          <ServerSelector
+            getServerInfoButtonClick={this.handleServerSelector.bind(this)}
+          />
+        </FadeInDown>
+        {this.state.infoLoaded ? (
+          <FadeInUp>
+            <ServerInfo serverInfo={this.state.info}></ServerInfo>
+          </FadeInUp>
+        ) : null}
+      </div>
+    );
+  }
 }
 
-export default Background
+export default Background;

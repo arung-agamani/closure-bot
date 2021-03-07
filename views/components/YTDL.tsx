@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import socketIO from 'socket.io-client';
-import { VideoDetails } from 'ytdl-core';
 
+import config from '../config';
 import Card, { YTDLCardProps } from './YTDLCard';
-import { setMap } from '../../web/ytdl';
+// import { setMap } from '../../web/ytdl';
 
-const SOCKET_SERVER = 'https://closure.howlingmoon.dev/';
+const SOCKET_SERVER = 'http://localhost:2000';
 
 interface DownloadedCardProps {
   downloadLink: string;
@@ -80,10 +80,10 @@ const YTDL: React.FC = () => {
         `Done conversion. \nNow serving '${data.filename}' on ${data.link} for 5 minutes`
       );
       // setAudioUrl(data.link);
-      const videoInfo = data.metadata as VideoDetails;
+      const videoInfo = data.metadata;
       const metadata: YTDLCardProps = {
         downloadLink: data.link,
-        videoThumbnail: videoInfo.thumbnail.thumbnails[0].url,
+        videoThumbnail: videoInfo.thumbnails[0].url,
         videoTitle: videoInfo.title,
         videoId: videoInfo.videoId,
       };

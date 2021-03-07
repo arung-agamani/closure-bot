@@ -8,7 +8,7 @@ console.log('initiating get info');
 const ffmpegPipe = fs.createWriteStream('pipetest.mp3');
 const passStream = new stream.PassThrough();
 
-ytdl('https://www.youtube.com/watch?v=ft-HOsTzQQ4', {
+const video = ytdl('https://www.youtube.com/watch?v=ft-HOsTzQQ4', {
   filter: 'audioonly',
 })
   .on('progress', (chunkLength) => {
@@ -16,10 +16,9 @@ ytdl('https://www.youtube.com/watch?v=ft-HOsTzQQ4', {
   })
   .on('end', () => {
     console.log('ytdl finished fetching file');
-  })
-  .pipe(passStream);
+  });
 
-ffmpeg(passStream)
+const ffmpegCommand = ffmpeg()
   .format('mp3')
   .audioCodec('libmp3lame')
   .output(ffmpegPipe)
@@ -32,5 +31,7 @@ ffmpeg(passStream)
   })
   .on('end', () => {
     console.log('Finished?');
-  })
-  .run();
+  });
+
+video.pipe(passStream);
+ffmpegCommand.input(passStream).run();

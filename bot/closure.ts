@@ -8,6 +8,7 @@ import * as ts from 'typescript';
 import { CronJob } from 'cron';
 
 import WarfarinDb from './database';
+import logger from '../utils/winston';
 
 const path = require('path');
 
@@ -73,7 +74,8 @@ class Closure {
         if (err) {
           return console.error(err.message);
         }
-        console.log('Bot connected to database!');
+        // console.log('Bot connected to database!');
+        logger.info('Bot connected to database!');
         this.isDatabaseReady = true;
       }
     );
@@ -85,7 +87,8 @@ class Closure {
 
   start(token: string) {
     this.client.on('ready', async () => {
-      console.log(`Logged in as ${this.client.user?.tag}!`);
+      // console.log(`Logged in as ${this.client.user?.tag}!`);
+      logger.info(`Logged in as ${this.client.user?.tag}!`);
       this.client.user?.setPresence({
         activity: {
           name: `${this.client.guilds.cache.size} insane doctors.`,
