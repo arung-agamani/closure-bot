@@ -6,6 +6,8 @@ import * as sqlite from 'sqlite3';
 import axios from 'axios';
 import * as ts from 'typescript';
 import { CronJob } from 'cron';
+import { google } from 'googleapis';
+import { addDays } from 'date-fns';
 
 import WarfarinDb from './database';
 import logger from '../utils/winston';
@@ -30,9 +32,11 @@ export interface ClosureGuildRes {
   tags?: any;
 }
 
-// export interface ClosureClient extends Discord.Client {
-//     commands: Discord.Collection<any, any>;
-// }
+const oauthClient = new google.auth.OAuth2(
+  process.env.GOOGLE_CLIENT_ID,
+  process.env.GOOGLE_CLIENT_SECRET,
+  'https://developers.google.com/oauthplayground'
+)
 
 class Closure {
   public client: Discord.Client;
@@ -83,6 +87,8 @@ class Closure {
     this.isDev = process.env.NODE_ENV === 'dev';
     this.basePath = closureConfig.basePath;
     this.ytdlMp3Map = new Map();
+
+    
   }
 
   start(token: string) {
@@ -519,23 +525,37 @@ class Closure {
   }
 
   cronReminder() {
-    const cronJob = new CronJob('0 0 7 * * *', () => {
-      const chan = this.client.guilds.cache.get('339763195554299904')?.channels.cache.get('705468600340709418') as Discord.TextChannel;
-      if (chan) {
-        chan.send(`Yo, Dokutah. Wake up! <@145558597424644097>`)
-      }
-    }, null, false, 'Asia/Makassar')
     const dailyHobby = new CronJob('0 0 7,14,21 * * *', async () => {
       const me = await this.client.users.fetch('145558597424644097')
       if (me) {
+        oauthClient.setCredentials({
+          refresh_token: process.env.GOOGLE_OAUTH_REFRESH_TOKEN
+        })
+        const calendar = google.calendar({
+          version: 'v3',
+          auth: oauthClient
+        })
         const embed = new Discord.MessageEmbed()
-        embed.addField('Kuliah stuffs', 'Jangan lupa presensi ama catat apa yang mau dilakuin besok.\nIngat PR dan hal hal lainnya');
-        embed.addField('Hobby stuffs', '1. Hobi yang membuatmu sehat: null :(\n2. Hobi yang membuatmu belajar: Ngoding gans, 2 jam aja.\n3. Hobi yang membuatmu produktif: Go nggambar atau ngedit hari ini atau bikin game sono.\n4. Hobi yang membuatmu senang: main genshin sana atau apalah. Kalau gacha jangan lupa multitasking. 1 jam cukup.')
-        embed.addField('Tanoto stuffs', 'Ingat proyekan, status proyekan. Ingat ngomong ke anak-anaknya. Jangan denial awas kau.')
-        me.send(embed)
+        calendar.events.list({
+          calendarId: process.env.INIT_TARGET_EMAIL,
+          timeMin: new Date().toISOString(),
+          timeMax: addDays(new Date(), 30).toISOString()
+        }).then(res => {
+            console.log(`Found ${res.data.items.length} data`)
+            embed.addField('Kuliah stuffs', 'Jangan lupa presensi ama catat apa yang mau dilakuin besok.\nIngat PR dan hal hal lainnya');
+            embed.addField('Hobby stuffs', '1. Hobi yang membuatmu sehat: null :(\n2. Hobi yang membuatmu belajar: Ngoding gans, 2 jam aja.\n3. Hobi yang membuatmu produktif: Go nggambar atau ngedit hari ini atau bikin game sono.\n4. Hobi yang membuatmu senang: main genshin sana atau apalah. Kalau gacha jangan lupa multitasking. 1 jam cukup.')
+            embed.addField('Tanoto stuffs', 'Ingat proyekan, status proyekan. Ingat ngomong ke anak-anaknya. Jangan denial awas kau.')
+            res.data.items.forEach((event, index) => {
+              embed.addField(`${index+1}. ${event.summary}`, event.start.dateTime ? new Date(event.start.dateTime).toLocaleString() : event.start.date)
+            })
+            me.send(embed)
+        }).catch(err => {
+            console.log('Error on fetching calendar:', err)
+            me.send(`Error on fetching calendar: ${err}`)
+        })
       }
     }, null, false, 'Asia/Makassar');
-    const weeklyAgateReminder = new CronJob('0 0 12 * * 2', async () => {
+    const weeklyAgateReminder = new CronJob('0 0 12 * * 0-1', async () => {
       const me = await this.client.users.fetch('145558597424644097')
       if (me) {
         const embed = new Discord.MessageEmbed()
@@ -543,7 +563,6 @@ class Closure {
         me.send(embed)
       }
     })
-    cronJob.start()
     dailyHobby.start()
     weeklyAgateReminder.start()
   }

@@ -6,10 +6,6 @@ const Homepage: React.FC = () => {
   return (
     <Wrapper>
       <div className="hero">
-        <h1>
-          [Insert Closure illustration here that drawn by me when it&apos;s
-          finished, hm]
-        </h1>
         <h2>
           For now, you can go to Youtube to MP3 downloader by clicking{' '}
           <Link to="/ytdl">here</Link>
@@ -88,7 +84,9 @@ const Wrapper = styled.div`
 
   .hero {
     display: flex;
-    background-color: #11111d;
+    background-image: url('/static/closure-bg.jpg');
+    background-size: cover;
+    background-position: center;
     color: #f8f8f8;
     flex-direction: column;
     margin: auto;
