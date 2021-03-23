@@ -1,112 +1,111 @@
 body {
-    width : 800px;
-    height: 600px;
-    background-image: url('./bg-compressed.jpg');
-    background-position: center;
-    background-size: cover;
-    overflow: hidden;
-    margin: 0 0 0 0;
+  width: 800px;
+  height: 600px;
+  background-image: url('./bg-compressed.jpg');
+  background-position: center;
+  background-size: cover;
+  overflow: hidden;
+  margin: 0 0 0 0;
 }
 
 .panel-base {
-    min-width: 800px;
-    min-height: 600px;
-    background-color: rgb(43, 43, 43);
-    overflow: hidden;
+  min-width: 800px;
+  min-height: 600px;
+  background-color: rgb(43, 43, 43);
+  overflow: hidden;
 }
 
-
 .plate-base {
-    color : black;
-    background-color: white;
-    box-shadow: 0px 10px 10px 0px rgba(128, 128, 128, 0.527);
+  color: black;
+  background-color: white;
+  box-shadow: 0px 10px 10px 0px rgba(128, 128, 128, 0.527);
 }
 
 .server-selector-base {
-    background-color: rgba(255, 255, 255, 0.815);
+  background-color: rgba(255, 255, 255, 0.815);
 }
 
 .sidebar-base {
-    min-width: 100vw;
-    min-height: 100vh;
-    position: fixed;
-    z-index: 990;
-    left : 0;
-    top : 0;
-    transform: translate3d(-100vw, 0, 0);
-    background-image: url('./sidebar-warfarin.jpg');
-    background-color: black;
-    background-position: right bottom;
-    background-repeat: no-repeat;
+  min-width: 100vw;
+  min-height: 100vh;
+  position: fixed;
+  z-index: 990;
+  left: 0;
+  top: 0;
+  transform: translate3d(-100vw, 0, 0);
+  background-image: url('./sidebar-warfarin.jpg');
+  background-color: black;
+  background-position: right bottom;
+  background-repeat: no-repeat;
 }
 .sidebar-base.sidebar-show {
-    transform: translate3d(0, 0, 0);
-    transition: transform 0.3s;
+  transform: translate3d(0, 0, 0);
+  transition: transform 0.3s;
 }
 .sidebar-base.sidebar-hide {
-    transform: translate3d(-100vw, 0, 0);
-    transition: transform 0.3s;
+  transform: translate3d(-100vw, 0, 0);
+  transition: transform 0.3s;
 }
 
 #sidebarItems p:hover {
-    color: rgb(180, 180, 180);
+  color: rgb(180, 180, 180);
 }
 
 #roundButton {
-    background-color: rgb(255, 47, 47);
-    margin-bottom: 20px;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    border: 10px solid rgb(0, 0, 0);
-    outline: none;
-    transition: all .2s cubic-bezier(0, 1.26, .8, 1.28);
-    position : fixed;
-    transform: translate(0px,275px);
-    z-index: 999;
-  }
-   
-  #roundButton:hover {
-    background-color: rgb(255, 47, 47);
-    cursor: pointer;
-    border-color: rgb(0, 0, 0);
-    transform: translate(0px,275px);
-  }
-   
-  #roundButton:active {
-    border-color: rgb(149, 149, 149);
-    background-color: #FFF;
-  }
+  background-color: rgb(255, 47, 47);
+  margin-bottom: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 10px solid rgb(0, 0, 0);
+  outline: none;
+  transition: all 0.2s cubic-bezier(0, 1.26, 0.8, 1.28);
+  position: fixed;
+  transform: translate(0px, 275px);
+  z-index: 999;
+}
+
+#roundButton:hover {
+  background-color: rgb(255, 47, 47);
+  cursor: pointer;
+  border-color: rgb(0, 0, 0);
+  transform: translate(0px, 275px);
+}
+
+#roundButton:active {
+  border-color: rgb(149, 149, 149);
+  background-color: #fff;
+}
 
 .tagSelector {
-    background-image: url(./warfarin-sleep.png);
-    background-position: top right;
-    background-repeat: no-repeat;
-    background-size: auto 95px;
+  background-image: url(./warfarin-sleep.png);
+  background-position: top right;
+  background-repeat: no-repeat;
+  background-size: auto 95px;
 }
 
 .tagLabel p {
-    margin-top: 5px;
-    margin-bottom: 5px;
-    -webkit-user-select: none;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  -webkit-user-select: none;
 }
 .tagLabel {
-    box-shadow: grey 0px 10px 10px 0px;
-    transition: background-color 0.5s;
+  box-shadow: grey 0px 10px 10px 0px;
+  transition: background-color 0.5s;
 }
 .tagLabel.tag-class {
-    background-color : rgb(0, 0, 0);
+  background-color: rgb(0, 0, 0);
 }
 .tagLabel.tag-pos {
-    background-color : rgb(5, 46, 7);
+  background-color: rgb(5, 46, 7);
 }
 .tagLabel.tag-affix {
-    background-color : rgb(8, 11, 54);
+  background-color: rgb(8, 11, 54);
 }
 .tagLabel.tag-quali {
-    background-color : rgb(90, 8, 63);
+  background-color: rgb(90, 8, 63);
 }
 .tagLabel.tag-selected {
-    background-color: rgb(83, 183, 241);
-    transition: background-color 0.5s;
+  background-color: rgb(83, 183, 241);
+  transition: background-color 0.5s;
 }

@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
@@ -11,6 +12,8 @@ import { PanelTypes } from './components/utils';
 import store from './store/index';
 import { addArticle } from './actions/index';
 
+import GenshinToolsPage from './pages/genshin';
+
 window.store = store;
 window.addArticle = addArticle;
 
@@ -19,7 +22,7 @@ class App extends React.Component {
     super(props);
     this.state = {
       sidebarToggle: false,
-      currentPanel: PanelTypes.CLOSURE,
+      currentPanel: PanelTypes.GENSHIN,
     };
     this.handleSidebarButtonClicked = this.handleSidebarButtonClicked.bind(
       this
@@ -65,6 +68,8 @@ class App extends React.Component {
           <Closure></Closure>
         ) : this.state.currentPanel === PanelTypes.RECRUITMENTCALC ? (
           <RecruitmentCalculator></RecruitmentCalculator>
+        ) : this.state.currentPanel === PanelTypes.GENSHIN ? (
+          <GenshinToolsPage />
         ) : null}
       </Provider>
     );

@@ -38,6 +38,10 @@ const oauthClient = new google.auth.OAuth2(
   'https://developers.google.com/oauthplayground'
 )
 
+const calendarScopes = process.env.CALENDAR_SCOPES.split(',')
+const calendarRegexString = `^[${calendarScopes.join('|')}]`
+const calendarRegex = new RegExp(calendarRegexString, 'ig')
+
 class Closure {
   public client: Discord.Client;
 
@@ -536,33 +540,46 @@ class Closure {
           auth: oauthClient
         })
         const embed = new Discord.MessageEmbed()
-        calendar.events.list({
-          calendarId: process.env.INIT_TARGET_EMAIL,
-          timeMin: new Date().toISOString(),
-          timeMax: addDays(new Date(), 30).toISOString()
-        }).then(res => {
-            console.log(`Found ${res.data.items.length} data`)
-            embed.addField('Kuliah stuffs', 'Jangan lupa presensi ama catat apa yang mau dilakuin besok.\nIngat PR dan hal hal lainnya');
-            embed.addField('Hobby stuffs', '1. Hobi yang membuatmu sehat: null :(\n2. Hobi yang membuatmu belajar: Ngoding gans, 2 jam aja.\n3. Hobi yang membuatmu produktif: Go nggambar atau ngedit hari ini atau bikin game sono.\n4. Hobi yang membuatmu senang: main genshin sana atau apalah. Kalau gacha jangan lupa multitasking. 1 jam cukup.')
-            embed.addField('Tanoto stuffs', 'Ingat proyekan, status proyekan. Ingat ngomong ke anak-anaknya. Jangan denial awas kau.')
-            res.data.items.forEach((event, index) => {
-              embed.addField(`${index+1}. ${event.summary}`, event.start.dateTime ? new Date(event.start.dateTime).toLocaleString() : event.start.date)
-            })
-            me.send(embed)
-        }).catch(err => {
-            console.log('Error on fetching calendar:', err)
-            me.send(`Error on fetching calendar: ${err}`)
-        })
+        try {
+          const res = await calendar.calendarList.list({})
+          const items = []
+          for (const item of res.data.items) {
+            try {
+              const events = await calendar.events.list({
+                calendarId: item.id,
+                timeMin: new Date().toISOString(),
+                timeMax: addDays(new Date(), 30).toISOString()
+              })
+              for (const event of events.data.items) {
+                items.push([event.summary, event.start.dateTime ? new Date(event.start.dateTime).toLocaleString() : event.start.date])
+              }
+            } catch (err) {
+              console.log('Error on fetching calendar:', err)
+              me.send(`Error on fetching calendar: ${err}`)
+            }
+          }
+          embed.addField('Kuliah stuffs', 'Jangan lupa presensi ama catat apa yang mau dilakuin besok.\nIngat PR dan hal hal lainnya');
+          embed.addField('Hobby stuffs', '1. Hobi yang membuatmu sehat: null :(\n2. Hobi yang membuatmu belajar: Ngoding gans, 2 jam aja.\n3. Hobi yang membuatmu produktif: Go nggambar atau ngedit hari ini atau bikin game sono.\n4. Hobi yang membuatmu senang: main genshin sana atau apalah. Kalau gacha jangan lupa multitasking. 1 jam cukup.')
+          embed.addField('Tanoto stuffs', 'Ingat proyekan, status proyekan. Ingat ngomong ke anak-anaknya. Jangan denial awas kau.')
+          items.forEach((event, index) => {
+            embed.addField(`${index+1}. ${event[0]}`, event[1])
+          })
+          me.send(embed)
+        } catch (err) {
+          console.log('Error on fetching calendar:', err)
+          me.send(`Error on fetching calendar: ${err}`)
+        }
+        
       }
     }, null, false, 'Asia/Makassar');
-    const weeklyAgateReminder = new CronJob('0 0 12 * * 0-1', async () => {
+    const weeklyAgateReminder = new CronJob('0 0 12 * * 0-2', async () => {
       const me = await this.client.users.fetch('145558597424644097')
       if (me) {
         const embed = new Discord.MessageEmbed()
         embed.addField('Agate MKBM', 'Jangan lupa presensi.');
         me.send(embed)
       }
-    })
+    }, null, false, 'Asia/Makassar')
     dailyHobby.start()
     weeklyAgateReminder.start()
   }
