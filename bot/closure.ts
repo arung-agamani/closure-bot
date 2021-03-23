@@ -544,18 +544,20 @@ class Closure {
           const res = await calendar.calendarList.list({})
           const items = []
           for (const item of res.data.items) {
-            try {
-              const events = await calendar.events.list({
-                calendarId: item.id,
-                timeMin: new Date().toISOString(),
-                timeMax: addDays(new Date(), 30).toISOString()
-              })
-              for (const event of events.data.items) {
-                items.push([event.summary, event.start.dateTime ? new Date(event.start.dateTime).toLocaleString() : event.start.date])
+            if (item.id.match(calendarRegex)) {
+              try {
+                const events = await calendar.events.list({
+                  calendarId: item.id,
+                  timeMin: new Date().toISOString(),
+                  timeMax: addDays(new Date(), 30).toISOString()
+                })
+                for (const event of events.data.items) {
+                  items.push([event.summary, event.start.dateTime ? new Date(event.start.dateTime).toLocaleString() : event.start.date])
+                }
+              } catch (err) {
+                console.log('Error on fetching calendar:', err)
+                me.send(`Error on fetching calendar: ${err}`)
               }
-            } catch (err) {
-              console.log('Error on fetching calendar:', err)
-              me.send(`Error on fetching calendar: ${err}`)
             }
           }
           embed.addField('Kuliah stuffs', 'Jangan lupa presensi ama catat apa yang mau dilakuin besok.\nIngat PR dan hal hal lainnya');
