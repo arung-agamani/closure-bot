@@ -118,7 +118,7 @@ class Closure {
           this.commands.set(fileCmd.name, fileCmd);
         })
         .catch((err) => {
-          console.error(`Error loading file with name : ${file}`);
+          console.error(`Error loading file with name : ${file}\n${err}`);
         });
     }
     this.client.on('message', (msg) => {
@@ -154,12 +154,6 @@ class Closure {
       .filter((file) => file.endsWith('.ts'));
     return new Promise((res, rej) => {
       for (const file of this.commandFilesTs) {
-        /* const command = import(`./commands/${file}`).then(fileCmd => {
-                    console.log(`Loaded file with info : ${fileCmd.name}`);
-                    this.commands.set(fileCmd.name, fileCmd);
-                }).catch(err => {
-                    console.error(`Error loading file with name : ${file}`);
-                }) */
         try {
           const command = require(`./commands/${file}`);
           const code = fs
@@ -176,7 +170,7 @@ class Closure {
           break;
         }
       }
-      res();
+      res(true);
     });
   }
 
@@ -184,12 +178,6 @@ class Closure {
     return new Promise((res, rej) => {
       const promises_array: Array<Promise<any>> = [];
       for (const file of this.commandFilesTs) {
-        /* const command = import(`./commands/${file}`).then(fileCmd => {
-                    console.log(`Loaded file with info : ${fileCmd.name}`);
-                    this.commands.set(fileCmd.name, fileCmd);
-                }).catch(err => {
-                    console.error(`Error loading file with name : ${file}`);
-                }) */
         const command = import(`./commands/${file}`);
         promises_array.push(command);
       }
@@ -201,7 +189,7 @@ class Closure {
             this.commands.delete(cmd.name);
             this.commands.set(cmd.name, cmd);
           }
-          res();
+          res(true);
         })
         .catch((err) => {
           console.error(`Error loading file...`);

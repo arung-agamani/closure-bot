@@ -13,6 +13,7 @@ import store from './store/index';
 import { addArticle } from './actions/index';
 
 import GenshinToolsPage from './pages/genshin';
+import PRTSPage from './pages/prts.jsx';
 
 window.store = store;
 window.addArticle = addArticle;
@@ -70,6 +71,8 @@ class App extends React.Component {
           <RecruitmentCalculator></RecruitmentCalculator>
         ) : this.state.currentPanel === PanelTypes.GENSHIN ? (
           <GenshinToolsPage />
+        ) : this.state.currentPanel === PanelTypes.PRTS ? (
+          <PRTSPage />
         ) : null}
       </Provider>
     );
