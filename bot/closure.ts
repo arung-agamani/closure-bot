@@ -102,6 +102,11 @@ class Closure {
     this.client.on('ready', async () => {
       // console.log(`Logged in as ${this.client.user?.tag}!`);
       logger.info(`Logged in as ${this.client.user?.tag}!`);
+      const prefixes = await prisma.discord_guild_prefix.findMany();
+      prefixes.forEach((prefix) => {
+        redis.set(prefix.guild_id, prefix.prefix);
+        console.log(`Added prefix to ${prefix.guild_id} : ${prefix.prefix}`);
+      });
       this.client.user?.setPresence({
         activity: {
           name: `${this.client.guilds.cache.size} insane doctors.`,
