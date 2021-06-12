@@ -2,7 +2,6 @@
     "compilerOptions": {
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
-        "jsx": "react",
         "outDir": "build",
         "typeRoots": [
         "node_modules/@types"
@@ -12,6 +11,11 @@
         "allowSyntheticDefaultImports": true,
         "downlevelIteration": true,
         "skipLibCheck": true,
-        "allowJs": true
-    }
+        "allowJs": true,
+    },
+    "exclude": [
+        "crx",
+        "build",
+        "views"
+    ]
 }

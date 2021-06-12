@@ -1,0 +1,93 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model discord_guild {
+  guild_name           String                @db.VarChar(32)
+  guild_id             String                @id @db.VarChar(32)
+  registrar            String                @db.VarChar(32)
+  id                   Int                   @default(autoincrement())
+  discord_guild_prefix discord_guild_prefix?
+}
+
+model discord_guild_channels {
+  id                 Int                  @unique @default(autoincrement())
+  guild_id           String               @db.VarChar(32)
+  channel_id         String               @db.VarChar(32)
+  registrar          String               @db.VarChar(32)
+  discord_guild_tags discord_guild_tags[]
+
+  @@id([guild_id, channel_id])
+}
+
+model discord_guild_prefix {
+  guild_id      String        @id @db.VarChar(32)
+  prefix        String        @db.VarChar(3)
+  discord_guild discord_guild @relation(fields: [guild_id], references: [guild_id])
+}
+
+model discord_guild_tags {
+  id                     Int                    @default(autoincrement())
+  guild_channel_id       Int
+  tag                    String                 @db.VarChar(32)
+  registrar              String                 @db.VarChar(32)
+  discord_guild_channels discord_guild_channels @relation(fields: [guild_channel_id], references: [id])
+
+  @@id([guild_channel_id, tag])
+}
+
+model playlist {
+  id            Int             @id @default(autoincrement())
+  userId        String          @db.VarChar
+  name          String          @db.VarChar
+  playlist_item playlist_item[]
+}
+
+model playlist_item {
+  id         Int       @id @default(autoincrement())
+  order      Int
+  link       String    @db.VarChar
+  playlistId Int?
+  playlist   playlist? @relation(fields: [playlistId], references: [id])
+}
+
+model reminder {
+  id         Int    @id @default(autoincrement())
+  userId     String @db.VarChar
+  cronTime   String @db.VarChar
+  content    String @db.VarChar
+  uniqueHash String @db.VarChar
+}
+
+model user {
+  id            Int            @id
+  name          String         @db.VarChar
+  description   String
+  user_metadata user_metadata?
+}
+
+model user_metadata {
+  id         Int      @id @default(autoincrement())
+  alamat     String   @db.VarChar
+  dateJoined DateTime @db.Timestamp(6)
+  userId     Int?     @unique
+  user       user?    @relation(fields: [userId], references: [id])
+}
+
+model ak_operator {
+  id         Int      @default(autoincrement())
+  name       String   @db.VarChar(32)
+  desc       String
+  tags       String[] @db.VarChar(16)
+  in_recruit Boolean
+  faction    String   @db.VarChar(32)
+  rarity     Int
+  profession String   @db.VarChar(16)
+  position   String   @db.VarChar(16)
+  char_id    String   @id @db.VarChar(32)
+}

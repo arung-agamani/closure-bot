@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "types": [
+            "chrome"
+        ],
+        "outFile": "../dist/background.js",
+        "typeRoots": [
+            "node_modules/@types"
+        ],
+        "lib": ["ES2015", "DOM"],
+    },
+    "exclude": [
+        "popup"
+    ]
+}

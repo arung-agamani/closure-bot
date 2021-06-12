@@ -1,4 +1,8 @@
 /* eslint-disable no-restricted-syntax */
+const prod_url = 'https://closure.howlingmoon.dev';
+const dev_url = 'http://localhost:2000';
+const isProd = false;
+const targetUrl = isProd ? prod_url : dev_url;
 let pointedGuildId =
   ''; /* artworks */ /* "],
                 id : "WARFARIN_PIXIV_" + tagObj.tag
@@ -70,7 +74,7 @@ function sendImageLink(info, tab) {
     jsonBody.pageUrl = info.pageUrl;
     getPointedGuildId((retval) => {
       jsonBody.guildId = retval;
-      xhr.open('POST', 'https://closure.howlingmoon.dev/warfarin');
+      xhr.open('POST', `${targetUrl}/warfarin`);
       xhr.setRequestHeader('Content-Type', 'application/json');
       xhr.send(JSON.stringify(jsonBody));
     });
@@ -85,7 +89,7 @@ function sendImageLink(info, tab) {
     console.log(pointedGuildId);
     getPointedGuildId((retval) => {
       jsonBody.guildId = retval;
-      xhr.open('POST', 'https://closure.howlingmoon.dev/warfarin');
+      xhr.open('POST', `${targetUrl}/warfarin`);
       xhr.setRequestHeader('Content-Type', 'application/json');
       xhr.send(JSON.stringify(jsonBody));
     });
@@ -97,7 +101,7 @@ function sendImageLink(info, tab) {
     console.log(pointedGuildId);
     getPointedGuildId((retval) => {
       jsonBody.guildId = retval;
-      xhr.open('POST', 'https://closure.howlingmoon.dev/warfarin');
+      xhr.open('POST', `${targetUrl}/warfarin`);
       xhr.setRequestHeader('Content-Type', 'application/json');
       xhr.send(JSON.stringify(jsonBody));
     });

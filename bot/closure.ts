@@ -11,6 +11,7 @@ import { addDays } from 'date-fns';
 
 import WarfarinDb from './database';
 import logger from '../utils/winston';
+import prisma, { getServerPrefix } from './database/prisma';
 
 const path = require('path');
 
@@ -414,6 +415,20 @@ class Closure {
         }
       }
     );
+  }
+
+  async getServerPrefix(guildId: string, msg: Discord.Message) {
+    try {
+      const prefix = await getServerPrefix(guildId);
+      if (prefix) {
+        msg.reply('Server prefix is ' + prefix.prefix)
+      } else {
+        msg.reply('No server prefix')
+      }
+    } catch (error) {
+      msg.reply('Error raised!');
+      logger.error(error);
+    }
   }
 
   checkChannelTags(guild_id: string, channel_id: string, callback) {

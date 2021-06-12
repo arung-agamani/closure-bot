@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "jsx": "react",
+        "esModuleInterop": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "lib": ["ES6", "ESNext", "DOM", "DOM.Iterable"],
+        "allowSyntheticDefaultImports": true,
+        "downlevelIteration": true,
+        "skipLibCheck": true,
+        "allowJs": false,
+    }
+}

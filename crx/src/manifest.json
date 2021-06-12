@@ -1,0 +1,16 @@
+{
+    "name": "Warfarin",
+    "version": "0.0.1",
+    "description": "Chrome Extension to interact with Closure-bot",
+    "manifest_version": 3,
+    "permissions" : ["storage", "declarativeContent", "contextMenus", "tabs", "cookies"],
+    "background" : {
+        "service_worker" : ["background.js"]
+    },
+    "host_permissions": [
+        "http://localhost:2000/*", "*://*.mihoyo.com/"
+    ],
+    "action" : {
+        "default_popup" : "popup-build/index.html"
+    }
+  }

@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 // ts section
 import express, { Request, Response } from 'express';
 import http from 'http';
@@ -14,6 +13,7 @@ import YTDLApp from './web/ytdlApp';
 import ytdlRoute, { setMap } from './web/ytdl';
 import discordRoute from './backend/discordOauth';
 import warfarinRoute from './backend/warfarinDb';
+import crxRouter from './backend/crx';
 
 config();
 
@@ -47,6 +47,7 @@ if (process.env.SERVER === '1') {
   server.use('/ytdl', ytdlRoute);
   server.use('/api/discord', discordRoute);
   server.use('/api/warfarin', warfarinRoute);
+  server.use('/api/crx', crxRouter);
 
   server.get('/ytdl/mp3/download', (req: Request, res: Response) => {
     // console.log(req.query);
@@ -58,8 +59,6 @@ if (process.env.SERVER === '1') {
   });
 
   server.post('/closure', (req: Request, res: Response) => {
-    // res.send('okay dokutah');
-    // botApp.sendGithubEmbed(req.body);
     res.json({ status: 200 });
   });
 
