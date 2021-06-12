@@ -12,6 +12,7 @@ import { addDays } from 'date-fns';
 import WarfarinDb from './database';
 import logger from '../utils/winston';
 import prisma, { getServerPrefix } from './database/prisma';
+import redis from '../utils/redis';
 
 const path = require('path');
 
@@ -42,6 +43,7 @@ const oauthClient = new google.auth.OAuth2(
 const calendarScopes = process.env.CALENDAR_SCOPES.split(',')
 const calendarRegexString = `^[${calendarScopes.join('|')}]`
 const calendarRegex = new RegExp(calendarRegexString, 'ig')
+
 
 class Closure {
   public client: Discord.Client;
@@ -122,11 +124,20 @@ class Closure {
           console.error(`Error loading file with name : ${file}\n${err}`);
         });
     }
-    this.client.on('message', (msg) => {
-      const prefix = this.isDev ? '%!' : '%^'; // add prefix lookup later
-      if (!msg.content.startsWith(prefix) || msg.author.bot) return;
+    this.client.on('message', async (msg) => {
+      const globalPrefix = this.isDev ? '%!' : '%^'; // add prefix lookup later
+      if (msg.author.bot) return;
+      let prefix: string;
+      if (msg.content.startsWith(globalPrefix)) {
+        prefix = globalPrefix;
+      } else {
+        const guildPrefix = await redis.get(msg.guild.id);
+        if (msg.content.startsWith(guildPrefix)) prefix = guildPrefix;
+      }
 
-      const args = msg.content.slice(2).split(/ +/);
+      if (!prefix) return;
+
+      const args = msg.content.slice(prefix.length).trim().split(/\s+/);
       const command = args.shift()?.toLowerCase();
       if (!this.commands.has(command)) return;
 
