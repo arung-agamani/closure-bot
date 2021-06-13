@@ -11,7 +11,7 @@ import { addDays } from 'date-fns';
 
 import WarfarinDb from './database';
 import logger from '../utils/winston';
-import prisma, { getServerPrefix } from './database/prisma';
+import prisma, { getServerPrefix } from '../db/prisma';
 import redis from '../utils/redis';
 
 const path = require('path');

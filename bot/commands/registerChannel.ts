@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Message } from 'discord.js';
 import * as ClosureType from '../closure';
-import { setChannelTag } from '../database/prisma';
+import { setChannelTag } from '../../db/prisma';
 import logger from '../../utils/winston';
 
 export const name = 'rc';

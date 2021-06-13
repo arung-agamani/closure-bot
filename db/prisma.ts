@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { PrismaClient } from '@prisma/client';
-import winston from '../../utils/winston';
+import winston from '../utils/winston';
 
 const prisma = new PrismaClient();
 

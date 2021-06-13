@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Message, MessageEmbed } from 'discord.js';
 import * as ClosureType from '../closure';
-import prisma from '../database/prisma';
+import prisma from '../../db/prisma';
 import logger from '../../utils/winston';
 import { ak_operator } from '.prisma/client';
 

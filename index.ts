@@ -14,6 +14,7 @@ import ytdlRoute, { setMap } from './web/ytdl';
 import discordRoute from './backend/discordOauth';
 import warfarinRoute from './backend/warfarinDb';
 import crxRouter from './backend/crx';
+import akAPIRouter from './backend/ak_api';
 
 config();
 
@@ -48,6 +49,7 @@ if (process.env.SERVER === '1') {
   server.use('/api/discord', discordRoute);
   server.use('/api/warfarin', warfarinRoute);
   server.use('/api/crx', crxRouter);
+  server.use('/api/ak', akAPIRouter);
 
   server.get('/ytdl/mp3/download', (req: Request, res: Response) => {
     // console.log(req.query);

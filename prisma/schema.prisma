@@ -80,14 +80,32 @@ model user_metadata {
 }
 
 model ak_operator {
-  id         Int      @default(autoincrement())
-  name       String   @db.VarChar(32)
-  desc       String
-  tags       String[] @db.VarChar(16)
-  in_recruit Boolean
-  faction    String   @db.VarChar(32)
-  rarity     Int
-  profession String   @db.VarChar(16)
-  position   String   @db.VarChar(16)
-  char_id    String   @id @db.VarChar(32)
+  id                   Int                    @default(autoincrement())
+  name                 String                 @db.VarChar(32)
+  desc                 String
+  tags                 String[]               @db.VarChar(16)
+  in_recruit           Boolean
+  faction              String                 @db.VarChar(32)
+  rarity               Int
+  profession           String                 @db.VarChar(16)
+  position             String                 @db.VarChar(16)
+  char_id              String                 @id @db.VarChar(32)
+  ak_operator_charword ak_operator_charword[]
+}
+
+model ak_operator_charword {
+  id              Int         @default(autoincrement())
+  charWordId      String      @id @db.VarChar(40)
+  charId          String      @db.VarChar(32)
+  voiceId         String      @db.VarChar(8)
+  voiceText       String
+  voiceTitle      String      @db.VarChar(32)
+  voiceIndex      Int
+  voiceType       String      @db.VarChar(16)
+  unlockType      String      @db.VarChar(16)
+  lockDescription String?     @db.VarChar(32)
+  placeType       String      @db.VarChar(32)
+  voiceAsset      String      @db.VarChar(32)
+  wordKey         String      @db.VarChar(32)
+  ak_operator     ak_operator @relation(fields: [charId], references: [char_id])
 }

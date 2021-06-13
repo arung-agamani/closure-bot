@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import prisma from '../bot/database/prisma';
+import prisma from '../db/prisma';
 import logger from '../utils/winston';
 
 const crxRouter = Router();
