@@ -91,6 +91,7 @@ model ak_operator {
   position             String                 @db.VarChar(16)
   char_id              String                 @id @db.VarChar(32)
   ak_operator_charword ak_operator_charword[]
+  ak_operator_handbook ak_operator_handbook?
 }
 
 model ak_operator_charword {
@@ -108,4 +109,27 @@ model ak_operator_charword {
   voiceAsset      String      @db.VarChar(32)
   wordKey         String      @db.VarChar(32)
   ak_operator     ak_operator @relation(fields: [charId], references: [char_id])
+}
+
+model ak_operator_handbook {
+  id                         Int                          @default(autoincrement())
+  charId                     String                       @id @db.VarChar(32)
+  infoName                   String                       @db.VarChar(32)
+  drawName                   String                       @db.VarChar(32)
+  ak_operator                ak_operator                  @relation(fields: [charId], references: [char_id])
+  ak_operator_handbook_story ak_operator_handbook_story[]
+}
+
+model ak_operator_handbook_story {
+  id                   Int                  @default(autoincrement())
+  charId               String               @db.VarChar(32)
+  storyTitle           String               @db.VarChar(32)
+  storyText            String
+  unLockorNot          Boolean
+  unLockType           Int
+  unLockParam          String               @db.VarChar(8)
+  unLockString         String               @db.VarChar(16)
+  ak_operator_handbook ak_operator_handbook @relation(fields: [charId], references: [charId])
+
+  @@id([charId, storyTitle])
 }

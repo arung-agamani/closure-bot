@@ -83,4 +83,43 @@ akAPIRouter.get(
   }
 );
 
+akAPIRouter.get(
+  '/operator/:charId/handbook',
+  async (req: Request, res: Response) => {
+    try {
+      const { charId } = req.params;
+      const handbook = await prisma.ak_operator_handbook.findFirst({
+        where: {
+          charId,
+        },
+        select: {
+          charId: true,
+          infoName: true,
+          drawName: true,
+          ak_operator_handbook_story: {
+            select: {
+              storyTitle: true,
+              storyText: true,
+            },
+          },
+        },
+      });
+      res.status(200).json({
+        status: 'success',
+        data: {
+          charId,
+          voiceActor: handbook.infoName,
+          illustrator: handbook.drawName,
+          stories: handbook.ak_operator_handbook_story,
+        },
+      });
+    } catch (error) {
+      res.status(500).json({
+        status: 'failed',
+        message: 'something went wrong',
+      });
+    }
+  }
+);
+
 export default akAPIRouter;

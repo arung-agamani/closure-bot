@@ -1421,6 +1421,11 @@
     "@types/webpack-sources" "*"
     source-map "^0.6.0"
 
+"@types/yt-search@^2.3.0":
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@types/yt-search/-/yt-search-2.3.0.tgz#9f8764ee391d0e0ef000149463d853e3e5ec1220"
+  integrity sha512-B0F8mn14F4nHWG5HJ0WUMhsiDqOPD/bHbPd0pEaj/+qZgmLV/Wmy7yo0xSKPRD9D3R/DUywqIhFFAPUMaYqi3Q==
+
 "@typescript-eslint/eslint-plugin@^4.6.0":
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/eslint-plugin/-/eslint-plugin-4.6.0.tgz#210cd538bb703f883aff81d3996961f5dba31fdb"
@@ -10209,10 +10214,10 @@ yt-search@^2.2.2:
     minimist "~1.2.5"
     node-fzf "~0.5.1"
 
-ytdl-core@^4.5.0:
-  version "4.5.0"
-  resolved "https://registry.yarnpkg.com/ytdl-core/-/ytdl-core-4.5.0.tgz#f07733387c548e5c3a5614c93ef55bde666eeaf4"
-  integrity sha512-e8r6skrakWNixsVlNPBMoRM1HrdW1swE97If9nenDUjF65uogYk4DvxIuqlmqRfBWKe+6aIZwqedNxUU9XLYJA==
+ytdl-core@^4.8.2:
+  version "4.8.2"
+  resolved "https://registry.yarnpkg.com/ytdl-core/-/ytdl-core-4.8.2.tgz#f034ad942c5d958f5987fc8ff0b0639664ae2fb7"
+  integrity sha512-O3n++YcgZawaXJwbPmnRDgfN6b4kU0DpNdkI9Na5yM3JAdfJmoq5UHc8v9Xjgjr1RilQUUh7mhDnRRPDtKr0Kg==
   dependencies:
     m3u8stream "^0.8.3"
     miniget "^4.0.0"

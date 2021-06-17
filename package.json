@@ -25,7 +25,8 @@
     "reinstall": "rm -rf node_modules",
     "copyenv": "cp .env build/.env && cp views/dist build/views -r",
     "prod": "cd build && cross-env BOT='1' SERVER='1' NODE_ENV='prod' node index.js",
-    "build-artifact": "yarn run compile && yarn run copyenv"
+    "build-artifact": "yarn run compile && yarn run copyenv",
+    "db-sync": "npx prisma introspect && npx prisma generate"
   },
   "engines": {
     "node": "12.x"
@@ -98,7 +99,7 @@
     "uuid": "^8.3.0",
     "winston": "^3.3.3",
     "yt-search": "^2.2.2",
-    "ytdl-core": "^4.5.0"
+    "ytdl-core": "^4.8.2"
   },
   "devDependencies": {
     "@babel/core": "^7.10.1",
@@ -122,6 +123,7 @@
     "@types/socket.io-client": "^1.4.34",
     "@types/styled-components": "^5.1.4",
     "@types/uuid": "^8.3.0",
+    "@types/yt-search": "^2.3.0",
     "@typescript-eslint/eslint-plugin": "^4.6.0",
     "@typescript-eslint/parser": "^4.5.0",
     "autoprefixer": "^10.2.6",
