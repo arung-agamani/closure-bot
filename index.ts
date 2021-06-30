@@ -146,8 +146,8 @@ if (process.env.SERVER === '1') {
   /* server.listen(2000, () => {
     console.log('Server is on at port 2000');
   }); */
-  httpServer.listen(2000, () => {
-    console.log('Server is on at port 2000');
+  httpServer.listen(10000, () => {
+    console.log('Server is on at port ', httpServer.address());
   });
 }
 
