@@ -11,9 +11,6 @@ skill.get('/:skillId/all', async (req: Request, res: Response) => {
       where: {
         skillId,
       },
-      include: {
-        skill_levels: true,
-      },
     });
     res.status(200).json({
       status: 'success',
@@ -21,7 +18,7 @@ skill.get('/:skillId/all', async (req: Request, res: Response) => {
     });
   } catch (error) {
     logger.error(error);
-    console.log(error)
+    console.log(error);
     res.status(500).json({
       status: 'failed',
       message: 'error happened',

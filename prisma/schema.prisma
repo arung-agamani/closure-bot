@@ -140,6 +140,7 @@ model ak_operator_skill {
   skillId      String                    @id @db.VarChar(32)
   iconId       String?                   @db.VarChar(32)
   hidden       Boolean
+  levels       Json?                     @db.Json
   char_skills  ak_operator_char_skill[]
   skill_levels ak_operator_skill_level[]
 }

@@ -47,16 +47,17 @@ console.log(`Max length of blackboard : ${bbMax}`);
 
 const prisma = new PrismaClient();
 const ak_operator_skill_values = [];
-const ak_operator_skill_level_values = [];
-const ak_operator_skill_level_blackboard_values = [];
+// const ak_operator_skill_level_values = [];
+// const ak_operator_skill_level_blackboard_values = [];
 skills.forEach((skill) => {
   const value = {
     skillId: skill.skillId,
     iconId: skill.iconId,
     hidden: skill.hidden,
+    levels: skill.levels,
   };
   ak_operator_skill_values.push(value);
-  skill.levels.forEach((level) => {
+  /* skill.levels.forEach((level) => {
     const lvlVal = {
       name: level.name,
       rangeId: level.rangeId,
@@ -82,7 +83,7 @@ skills.forEach((skill) => {
       };
       ak_operator_skill_level_blackboard_values.push(bbVal);
     });
-  });
+  }); */
 });
 (async () => {
   try {
@@ -91,7 +92,7 @@ skills.forEach((skill) => {
       skipDuplicates: true,
     });
     console.log(`Total values inserted to skill table: ${skillRes.count}`);
-    const levelRes = await prisma.ak_operator_skill_level.createMany({
+    /* const levelRes = await prisma.ak_operator_skill_level.createMany({
       data: ak_operator_skill_level_values,
       skipDuplicates: true,
     });
@@ -102,7 +103,7 @@ skills.forEach((skill) => {
     });
     console.log(
       `Total values inserted to level_blackboard table: ${bbRes.count}`
-    );
+    ); */
   } catch (error) {
     console.error('Error occured', error);
   } finally {
