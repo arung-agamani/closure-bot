@@ -43,6 +43,7 @@ akAPIRouter.get('/operators', async (req: Request, res: Response) => {
         name: true,
         char_id: true,
       },
+      orderBy: [{ name: 'asc' }],
     });
     res.status(200).json({
       status: 'success',
