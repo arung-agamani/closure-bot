@@ -1,3 +1,6 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-var-requires */
 const axios = require('axios');
 const fs = require('fs');
@@ -12,11 +15,13 @@ const { PrismaClient } = require('@prisma/client');
 
 async function main() {
   try {
-    // const { data: handbookData } = await axios.get('https://raw.githubusercontent.com/Dimbreath/ArknightsData/master/en-US/gamedata/excel/handbook_info_table.json');
-    const prisma = new PrismaClient();
-    const data = JSON.parse(
-      fs.readFileSync(path.resolve(__dirname, 'handbook.json'), 'utf-8')
+    const { data } = await axios.get(
+      'https://raw.githubusercontent.com/Dimbreath/ArknightsData/master/en-US/gamedata/excel/handbook_info_table.json'
     );
+    const prisma = new PrismaClient();
+    // const data = JSON.parse(
+    //   fs.readFileSync(path.resolve(__dirname, 'handbook.json'), 'utf-8')
+    // );
     const {
       handbookDict,
       handbookDisplayConditionList,
@@ -55,11 +60,13 @@ async function main() {
 
 async function story() {
   try {
-    // const { data: handbookData } = await axios.get('https://raw.githubusercontent.com/Dimbreath/ArknightsData/master/en-US/gamedata/excel/handbook_info_table.json');
-    const prisma = new PrismaClient();
-    const data = JSON.parse(
-      fs.readFileSync(path.resolve(__dirname, 'handbook.json'), 'utf-8')
+    const { data } = await axios.get(
+      'https://raw.githubusercontent.com/Dimbreath/ArknightsData/master/en-US/gamedata/excel/handbook_info_table.json'
     );
+    const prisma = new PrismaClient();
+    // const data = JSON.parse(
+    //   fs.readFileSync(path.resolve(__dirname, 'handbook.json'), 'utf-8')
+    // );
     const {
       handbookDict,
       handbookDisplayConditionList,

@@ -3,38 +3,42 @@
 const fs = require('fs');
 const path = require('path');
 const { PrismaClient } = require('@prisma/client');
-
-const charRaw = JSON.parse(
-  fs.readFileSync(path.resolve(__dirname, 'char.json'))
-);
-const gachaRaw = JSON.parse(
-  fs.readFileSync(path.resolve(__dirname, 'gacha.json'))
-);
-const chars = Object.keys(charRaw);
-
-const charIds = chars;
-
-const skill_values = [];
-chars.forEach((char) => {
-  const { skills } = charRaw[char];
-  skills.forEach((skill) => {
-    const value = {
-      charId: char,
-      skillId: skill.skillId,
-      overridePrefabKey: skill.overridePrefabKey,
-      overrideTokenKey: skill.overrideTokenKey,
-      levelUpCostCond: JSON.stringify(skill.levelUpCostCond),
-      unlockCond: JSON.stringify(skill.unlockCond),
-    };
-    if (value.skillId) skill_values.push(value);
-    // if (!value.skillId) console.log(value);
-  });
-});
+const axios = require('axios');
 
 const prisma = new PrismaClient();
 
 (async () => {
   try {
+    // const charRaw = JSON.parse(
+    //   fs.readFileSync(path.resolve(__dirname, 'char.json'))
+    // );
+    // const gachaRaw = JSON.parse(
+    //   fs.readFileSync(path.resolve(__dirname, 'gacha.json'))
+    // );
+    const { data: charRaw } = await axios.get(
+      'https://raw.githubusercontent.com/Dimbreath/ArknightsData/master/en-US/gamedata/excel/character_table.json'
+    );
+    const { data: gachaRaw } = await axios.get(
+      'https://raw.githubusercontent.com/Dimbreath/ArknightsData/master/en-US/gamedata/excel/gacha_table.json'
+    );
+    const chars = Object.keys(charRaw);
+    const charIds = chars;
+    const skill_values = [];
+    chars.forEach((char) => {
+      const { skills } = charRaw[char];
+      skills.forEach((skill) => {
+        const value = {
+          charId: char,
+          skillId: skill.skillId,
+          overridePrefabKey: skill.overridePrefabKey,
+          overrideTokenKey: skill.overrideTokenKey,
+          levelUpCostCond: JSON.stringify(skill.levelUpCostCond),
+          unlockCond: JSON.stringify(skill.unlockCond),
+        };
+        if (value.skillId) skill_values.push(value);
+        // if (!value.skillId) console.log(value);
+      });
+    });
     const inRecruitment = [];
     // const existingData = await prisma.ak_operator.findMany();
     // const existintDataCharId = existingData.map((x) => x.char_id);

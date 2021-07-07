@@ -34,6 +34,7 @@ async function main() {
   });
   console.log(`Total value in json: ${valueToInsert.length}`);
   console.log(`Total value inserted: ${prismaRes.count}`);
+  await prisma.$disconnect();
 }
 
 main();
