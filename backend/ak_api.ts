@@ -7,6 +7,7 @@ import path from 'path';
 import prisma from '../db/prisma';
 import operatorApi from './ak_api/operator';
 import skillApi from './ak_api/skills';
+import artistApi from './ak_api/artist';
 
 const akAPIRouter = Router();
 
@@ -35,6 +36,7 @@ akAPIRouter.use(
 
 akAPIRouter.use('/operator', operatorApi);
 akAPIRouter.use('/skill', skillApi);
+akAPIRouter.use('/artist', artistApi);
 
 akAPIRouter.get('/operators', async (req: Request, res: Response) => {
   try {

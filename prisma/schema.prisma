@@ -136,45 +136,12 @@ model ak_operator_handbook_story {
 }
 
 model ak_operator_skill {
-  id           Int                       @default(autoincrement())
-  skillId      String                    @id @db.VarChar(32)
-  iconId       String?                   @db.VarChar(32)
-  hidden       Boolean
-  levels       Json?                     @db.Json
-  char_skills  ak_operator_char_skill[]
-  skill_levels ak_operator_skill_level[]
-}
-
-model ak_operator_skill_level {
-  id            Int                                  @default(autoincrement())
-  name          String
-  rangeId       String?
-  description   String
-  skillType     Int
-  spType        Int
-  maxChargeTime Int
-  spCost        Int
-  initSp        Int
-  increment     Decimal                              @db.Decimal
-  prefabId      String?
-  duration      Decimal                              @db.Decimal
-  skillId       String                               @db.VarChar(32)
-  skill         ak_operator_skill                    @relation(fields: [skillId], references: [skillId])
-  blackboards   ak_operator_skill_level_blackboard[]
-
-  @@id([initSp, spCost, name])
-}
-
-model ak_operator_skill_level_blackboard {
-  id          Int                     @default(autoincrement())
-  name        String
-  spCost      Int
-  initSp      Int
-  key         String
-  value       Decimal                 @db.Decimal
-  skill_level ak_operator_skill_level @relation(fields: [name, spCost, initSp], references: [name, spCost, initSp])
-
-  @@id([value, key, initSp, spCost, name])
+  id          Int                      @default(autoincrement())
+  skillId     String                   @id @db.VarChar(32)
+  iconId      String?                  @db.VarChar(32)
+  hidden      Boolean
+  levels      Json?                    @db.Json
+  char_skills ak_operator_char_skill[]
 }
 
 model ak_operator_char_skill {
