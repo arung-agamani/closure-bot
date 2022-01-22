@@ -74,7 +74,7 @@
     "googleapis": "^67.1.1",
     "keyv": "^4.0.3",
     "mysql2": "^2.1.0",
-    "node-fetch": "^2.6.1",
+    "node-fetch": "^3.1.1",
     "pg": "^8.5.1",
     "postcss-cli": "^8.3.1",
     "qs": "^6.9.4",
