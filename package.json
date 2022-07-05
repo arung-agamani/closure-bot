@@ -49,7 +49,7 @@
   },
   "homepage": "https://github.com/arung-agamani/closure-bot#readme",
   "dependencies": {
-    "@discordjs/opus": "^0.3.2",
+    "@discordjs/opus": "^0.8.0",
     "@keyv/redis": "^2.1.2",
     "@prisma/client": "^2.24.1",
     "@reduxjs/toolkit": "^1.5.1",
